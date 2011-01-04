@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Track Your Time</string>
+    <string name="header_text">Track Your Time</string>
+	<string name="have_account">Don\'t have an account?</string>
+</resources>

@@ -1,0 +1,13 @@
+package trackyt.android.client.models;
+
+import org.json.JSONObject;
+
+public class Task {
+//	private final int id;
+//	private String description;
+//	private boolean status; 
+//	private final int createdDate; // not sure
+//	private int startedDate;
+//	private int stoppedDate;
+//	private int spent;
+}

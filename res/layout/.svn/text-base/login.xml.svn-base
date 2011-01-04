@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="#ffffff"
+  android:orientation="vertical">
+  
+	  <TextView
+	  	android:id="@+id/title_text_view"
+	  	android:layout_width="fill_parent"
+	  	android:layout_height="wrap_content"
+	  	android:text="Trackyt.net"
+	  	android:textColor="#ffffff"
+	  	android:textSize="14dp"
+	  	android:background="#206600"
+	  	android:paddingLeft="10dp"
+	  	android:textStyle="bold">
+	  </TextView>
+	  
+	  	<LinearLayout
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="wrap_content"
+	  		android:padding="10dp"
+	  		android:orientation="vertical"
+	  		android:background="#ecfff1">
+	  		
+			  	<TextView
+			  		android:id="@+id/login_text_view"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content"
+			  		android:text="Login"
+			  		android:textColor="#000000">
+			  	</TextView>
+			  		
+			  	<EditText
+			  		android:id="@+id/login_edit_text"
+			  		android:layout_width="fill_parent"
+			  		android:layout_height="wrap_content">
+			  	</EditText>
+			  	
+			  	<TextView
+			  		android:id="@+id/password_text_view"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content"
+			  		android:text="Password"
+			  		android:textColor="#000000">
+			  	</TextView>
+			  	
+			  	<EditText
+			  		android:id="@+id/password_edit_text"
+			  		android:layout_width="fill_parent"
+			  		android:layout_height="wrap_content">
+			  	</EditText>
+			  	
+			  	<Button
+			  		android:id="@+id/login_button"
+			  		android:layout_width="wrap_content"
+			  		android:layout_height="wrap_content"
+			  		android:text="Login"
+			  		android:layout_gravity="right"
+			  		android:layout_marginTop="20dp"
+			  		android:minWidth="150dp"
+			  		android:onClick="loginOnClick">
+			  	</Button>
+	  	
+	  	
+	  	</LinearLayout>
+	  	
+	  	<RelativeLayout
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="fill_parent"
+	  		android:padding="10dp">
+	  		
+			<Button
+				android:id="@+id/create_account_button"
+				android:text="Create Account"
+				android:layout_width="wrap_content"
+				android:minWidth="150dp"
+				android:layout_height="wrap_content"
+				android:layout_alignParentRight="true"
+				android:onClick="createAccountOnClick">
+			</Button>
+
+	  		<TextView
+	  			android:id="@+id/dont_have_account"
+	  			android:text="Don't have an account?"
+	  			android:textColor="#000000"
+	  			android:textStyle="bold"
+	  			android:layout_width="wrap_content"
+	  			android:layout_height="wrap_content"
+	  			android:layout_toLeftOf="@id/create_account_button">
+	  		</TextView>
+	  		
+	  	</RelativeLayout>
+	  	
+</LinearLayout>

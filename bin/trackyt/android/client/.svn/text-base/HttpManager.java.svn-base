@@ -1,4 +1,4 @@
-package trackyt.android.client.utils;
+package trackyt.android.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +25,6 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import android.util.Log;
 
@@ -36,7 +35,7 @@ public class HttpManager {
 	private HttpClient httpClient;
 	private HttpResponse httpResponse;
 	private HttpEntity httpEntity;
-	private List<NameValuePair> params;
+	List<NameValuePair> params;
 	
 	private HttpManager() {
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager created");
@@ -47,7 +46,7 @@ public class HttpManager {
 	}
 
 	/* Make Login */
-	public AuthResponse login(Credentials credentials) {
+	public JSONObject login(Credentials credentials) {
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer(MyConfig.POST_AUTH_URL);
 		HttpPost httpPost = new HttpPost(uri);
@@ -65,10 +64,9 @@ public class HttpManager {
 		}
 	    
 		JSONObject receivedJSON = postRequest(httpPost);
-		Converter converter = new Converter();
-		return converter.convertToAuthResponse(receivedJSON);
+		return receivedJSON;
 	}
-	
+
 	private JSONObject getRequest(HttpUriRequest requestType) {
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager's getRequest() invoked");
 		try {

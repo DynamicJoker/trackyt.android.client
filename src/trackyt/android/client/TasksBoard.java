@@ -2,10 +2,13 @@ package trackyt.android.client;
 
 import java.util.ArrayList;
 
+import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.utils.MyConfig;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +18,16 @@ import android.widget.TextView;
 
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList;
+	AuthResponse authResponse;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tasks_board);
+		
+		// Deserialize received authResponce object
+		Bundle extras = getIntent().getExtras(); 
+		authResponse = (AuthResponse) extras.getSerializable("auth");
 		
 		taskList = new ArrayList<Task>();
 		ListView listView = (ListView) findViewById(R.id.list_view);

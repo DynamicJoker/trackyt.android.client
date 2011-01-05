@@ -1,0 +1,138 @@
+package com.gmail.ebeletskiy;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+public class App extends Activity {
+//	UI controls
+	private Button getButton;
+	private Button postButton;
+	private Button deleteButton;
+	private Button putButton;
+	private TextView textView;
+	private List<NameValuePair> params;
+	
+//	Http stuff
+	private HttpManager httpManager;
+	private HttpUriRequest httpRequest;
+	private URI uri;
+	private JSONObject receivedJSON;
+	
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.main);
+        
+        httpManager = new HttpManager();
+        params = new ArrayList<NameValuePair>();
+
+        
+        textView = (TextView) findViewById(R.id.TextViewResponse);
+        getButton = (Button) findViewById(R.id.ButtonForGetRequest);
+        postButton = (Button) findViewById(R.id.ButtonForPostRequest);
+        deleteButton = (Button) findViewById(R.id.ButtonForDeleteRequest);
+        putButton = (Button) findViewById(R.id.ButtonForPutRequest);
+        
+        getButton.setOnClickListener(new View.OnClickListener() {
+        	
+			@Override
+			public void onClick(View v) {
+				if (MyConfig.DEBUG) Log.d("Dev", "getButton clicked");
+
+		        uri = urlComposer(MyConfig.GET_API_URL);
+		        httpRequest = new HttpGet(uri);
+				
+				receivedJSON = httpManager.getRequest(httpRequest);
+				textView.setText(receivedJSON.toString());
+			}
+		});
+        
+        postButton.setOnClickListener(new View.OnClickListener() {
+        	
+			@Override
+			public void onClick(View v) {
+				if (MyConfig.DEBUG) Log.d("Dev", "postButton clicked");
+
+				uri = urlComposer(MyConfig.POST_API_URL);
+				HttpPost httpPost = new HttpPost(uri);
+				setParams("sf_method", "POST");
+				setParams("username", "testing001");
+				setParams("email", "testing001@testing.com");
+				setParams("password", "testingpassword");
+				setParams("countryCode", "UA");
+				setParams("keep_notified", "False");
+				
+				try {
+					httpPost.setEntity(new UrlEncodedFormEntity(params));
+					if (MyConfig.DEBUG) Log.d("Dev", "Entity has been set with a list of params");
+					if (MyConfig.DEBUG) Log.d("Dev", "httpPost's entity is " + httpPost.getEntity().toString());
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+			    
+				receivedJSON = httpManager.postRequest(httpPost);
+				if (receivedJSON != null)
+					textView.setText(receivedJSON.toString());
+			}
+		});
+        
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+        	
+			@Override
+			public void onClick(View v) {
+				if (MyConfig.DEBUG) Log.d("Dev", "deleteButton clicked");
+				textView.setText("Connecting...");
+				
+				receivedJSON = httpManager.getRequest(httpRequest);
+			}
+		});
+        
+        putButton.setOnClickListener(new View.OnClickListener() {
+        	
+			@Override
+			public void onClick(View v) {
+				if (MyConfig.DEBUG) Log.d("Dev", "putButton clicked");
+				textView.setText("Connecting...");
+				
+				receivedJSON = httpManager.getRequest(httpRequest);
+			}
+		});
+    }
+    
+    private URI urlComposer(String apiUri) {
+    	URI uri;
+    	try {
+			uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, apiUri, null, null);
+			if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
+			return uri;	
+		} catch (URISyntaxException e) {
+			if (MyConfig.DEBUG) Log.d("Dev", "urlComposer was unable to construct a URL"); 
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+    private void setParams(String key, String value) {
+    	params.add(new BasicNameValuePair(key, value));
+    }
+}

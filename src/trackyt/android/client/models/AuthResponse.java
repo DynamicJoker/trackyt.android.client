@@ -1,8 +1,11 @@
 package trackyt.android.client.models;
 
-public class AuthResponse {
-	private boolean login;
+import java.io.Serializable;
+
+// Make it serializable to pass from Login to TasksBoard activity
+public class AuthResponse implements Serializable {
 	private String token;
+	private boolean login;
 	
 	public AuthResponse(String token, boolean login) {
 		this.token = token;

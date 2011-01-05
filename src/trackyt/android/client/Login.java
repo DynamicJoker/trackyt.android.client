@@ -1,7 +1,5 @@
 package trackyt.android.client;
 
-import org.json.JSONObject;
-
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.utils.HttpManager;
@@ -39,6 +37,9 @@ public class Login extends Activity {
 		loginButton = (Button) findViewById(R.id.login_button);
 		createAccutonButton = (Button) findViewById(R.id.create_account_button);
 		
+		loginEditText.setText("ebeletskiy@gmail.com");
+		passwordEditText.setText("mikusya");
+		
 	}
 
 	public void loginOnClick(View view) {
@@ -55,23 +56,11 @@ public class Login extends Activity {
 	}
 
 	private boolean doLogin() {
-		if (updateCredentials() == false) {
+		if (!updateCredentials()) {
 			return false;
 		}
 
-		JSONObject json = httpManager.login(credentials);
-
-		if (initAuthResponseObject(json)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private boolean initAuthResponseObject(JSONObject json) {
-		String token = json.optString("token");
-		boolean login = json.optBoolean("success");
-		authResponse = new AuthResponse(token, login);
+		authResponse = httpManager.login(credentials);
 
 		if (authResponse.getLogin()) {
 			return true;
@@ -95,7 +84,10 @@ public class Login extends Activity {
 	}
 
 	private void openTasksBoardActivity() {
-		 Intent myIntent = new Intent(Login.this, TasksBoard.class);
-		 Login.this.startActivity(myIntent);
+		 Intent intent = new Intent(Login.this, TasksBoard.class);
+		 // Pass authResponse object to TasksBoard activity
+		 intent.putExtra("auth", authResponse);
+		 Login.this.startActivity(intent);
+		 
 	}
 }

@@ -13,7 +13,7 @@ import android.util.Log;
 public class Converter {
 	
 	// Converting JSON to authResponse model
-	public AuthResponse convertToAuthResponse(JSONObject json) {
+	public AuthResponse toAuthResponse(JSONObject json) {
 		AuthResponse authResponse;
 		String token = null;
 		if (json == null) return null;
@@ -37,7 +37,7 @@ public class Converter {
 		}		
 	}
 	
-	public ArrayList<Task> convertJsonInTasks(JSONObject json) {
+	public ArrayList<Task> toTasks(JSONObject json) {
 		ArrayList<Task> list = new ArrayList<Task>();
 		
 		if(MyConfig.DEBUG) {

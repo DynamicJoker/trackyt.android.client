@@ -68,7 +68,7 @@ public class HttpManager {
 	    
 		JSONObject receivedJSON = postRequest(httpPost);
 		Converter converter = new Converter();
-		return converter.convertToAuthResponse(receivedJSON);
+		return converter.toAuthResponse(receivedJSON);
 	}
 	
 	/* Get tasks */
@@ -80,7 +80,7 @@ public class HttpManager {
 		HttpGet httpGet = new HttpGet(uri);
 		
 		JSONObject receivedJSON = getRequest(httpGet);
-		return converter.convertJsonInTasks(receivedJSON);
+		return converter.toTasks(receivedJSON);
 	}
 	
 	private JSONObject getRequest(HttpUriRequest requestType) {

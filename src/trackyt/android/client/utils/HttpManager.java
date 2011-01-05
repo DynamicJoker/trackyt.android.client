@@ -16,6 +16,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIUtils;
@@ -27,6 +28,7 @@ import org.json.JSONObject;
 
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
+import trackyt.android.client.models.Task;
 import android.util.Log;
 
 public class HttpManager {
@@ -46,7 +48,7 @@ public class HttpManager {
 		return httpManager;
 	}
 
-	/* Make Login */
+	/* Login */
 	public AuthResponse login(Credentials credentials) {
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer(MyConfig.POST_AUTH_URL);
@@ -69,7 +71,20 @@ public class HttpManager {
 		return converter.convertToAuthResponse(receivedJSON);
 	}
 	
+	/* Get tasks */
+	public ArrayList<Task> getTasks(AuthResponse auth) {
+		Converter converter = new Converter();
+		
+
+		URI uri = urlComposer(MyConfig.GET_TASKS_URL, auth.getToken());
+		HttpGet httpGet = new HttpGet(uri);
+		
+		JSONObject receivedJSON = getRequest(httpGet);
+		return converter.convertJsonInTasks(receivedJSON);
+	}
+	
 	private JSONObject getRequest(HttpUriRequest requestType) {
+		httpClient = new DefaultHttpClient();
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager's getRequest() invoked");
 		try {
 			httpResponse = httpClient.execute(requestType); 
@@ -171,7 +186,7 @@ public class HttpManager {
 	}
 	
     private URI urlComposer(String apiUri) {
-    	URI uri;
+    	URI uri = null;
     	try {
 			uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, apiUri, null, null);
 			if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
@@ -182,6 +197,25 @@ public class HttpManager {
 		}
     	return null;
     }
+    
+    private URI urlComposer(String apiUri, String token) {
+    	URI uri = null;
+    	try {
+    		String tmp = apiUri.toString();
+    		String[] array = tmp.split("<token>");
+    		tmp = array[0] + token + array[1];
+    		
+    		uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, tmp, null, null);
+			if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
+			return uri;	
+		} catch (URISyntaxException e) {
+			if (MyConfig.DEBUG) Log.d("Dev", "urlComposer was unable to construct a URL"); 
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+    
     
     private void setParams(String key, String value) {
     	params.add(new BasicNameValuePair(key, value));

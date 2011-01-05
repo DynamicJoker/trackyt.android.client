@@ -59,14 +59,9 @@ public class Login extends Activity {
 		if (!updateCredentials()) {
 			return false;
 		}
-
 		authResponse = httpManager.login(credentials);
-
-		if (authResponse.getLogin()) {
-			return true;
-		} else {
-			return false;
-		}
+		
+		return authResponse.getLogin();
 	}
 
 	private boolean updateCredentials() {
@@ -88,6 +83,5 @@ public class Login extends Activity {
 		 // Pass authResponse object to TasksBoard activity
 		 intent.putExtra("auth", authResponse);
 		 Login.this.startActivity(intent);
-		 
 	}
 }

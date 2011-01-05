@@ -8,7 +8,7 @@ public class MyConfig {
 //	APIs 
 	public static final String WEB_SERVER = "http://trackyt.net";
 	public static final String POST_AUTH_URL = "/api/v1.1/authenticate";
-	public static final String GET_TASKS_URL = "/api/v1.1/0fa63a5107942a4045e21272a04b0be3/tasks/all";
+	public static final String GET_TASKS_URL = "/api/v1.1/<token>/tasks/all";
 	public static final String POST_ADD_TASK_URL = "/api/v1.1/<token>/tasks/add";
 	public static final String DELETE_TASK_URL = "/api/v1.1/<token>/delete/15";
 	public static final String PUT_START_TASK_URL = "/api/v1.1/<token>/start/14";

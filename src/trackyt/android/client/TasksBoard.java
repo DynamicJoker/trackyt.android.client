@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.utils.HttpManager;
 import trackyt.android.client.utils.MyConfig;
 import android.app.Activity;
 import android.content.Context;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList;
-	AuthResponse authResponse;
+	AuthResponse auth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,14 +28,16 @@ public class TasksBoard extends Activity {
 		
 		// Deserialize received authResponce object
 		Bundle extras = getIntent().getExtras(); 
-		authResponse = (AuthResponse) extras.getSerializable("auth");
+		auth = (AuthResponse) extras.getSerializable("auth");
 		
-		taskList = new ArrayList<Task>();
+		HttpManager httpManager = HttpManager.getInstance();
+		taskList = httpManager.getTasks(auth);
+		
+//		taskList = new ArrayList<Task>();
 		ListView listView = (ListView) findViewById(R.id.list_view);
-		
 		listView.setAdapter(new MyAdapter(this, R.id.list_view, taskList));
 		
-		generateTestData(); // To be removed
+//		generateTestData();
 		
 	}
 	

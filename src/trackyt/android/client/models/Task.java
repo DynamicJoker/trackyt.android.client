@@ -11,6 +11,14 @@ public class Task {
 	private int stoppedDate;
 	private int spent;
 	
+	public Task() {
+		
+	}
+	
+	public Task(String description) {
+		this.description = description;
+	}
+	
 	public int getId() {
 		return id;
 	}

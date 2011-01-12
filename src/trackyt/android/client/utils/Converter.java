@@ -67,9 +67,25 @@ public class Converter {
 			}
 		} catch (JSONException e) {
 			Log.d("Dev", "Converter class, the convertJsonInTasks()");
-			e.printStackTrace();
+			 e.printStackTrace();
 		}
 		
 		return list;
+	}
+	
+	public JSONObject taskToJson(Task task) {
+		if (task == null) {
+			throw new NullPointerException("Task is null");
+		}
+		String str = "description: " + task.getDescription();
+		JSONObject json = null;
+		
+		try {
+			json = new JSONObject(str);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		return json; 
 	}
 }

@@ -39,13 +39,23 @@ public class HttpManager {
 	private HttpResponse httpResponse;
 	private HttpEntity httpEntity;
 	private List<NameValuePair> params;
+	private Converter converter;
+	AuthResponse auth;
 	
 	private HttpManager() {
+		converter = new Converter();
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager created");
 	}
 
 	public static HttpManager getInstance() {
 		return httpManager;
+	}
+	
+	public void initAuth(AuthResponse auth) {
+		if (auth == null) {
+			throw new NullPointerException("auth is null");
+		}
+		this.auth = auth;
 	}
 
 	/* Login */
@@ -67,20 +77,53 @@ public class HttpManager {
 		}
 	    
 		JSONObject receivedJSON = postRequest(httpPost);
-		Converter converter = new Converter();
 		return converter.toAuthResponse(receivedJSON);
 	}
 	
 	/* Get tasks */
-	public ArrayList<Task> getTasks(AuthResponse auth) {
-		Converter converter = new Converter();
+	public ArrayList<Task> getTasks() {
+		if (auth == null) {
+			throw new NullPointerException("auth is null");
+		}
 		
+		Converter converter = new Converter();
 
 		URI uri = urlComposer(MyConfig.GET_TASKS_URL, auth.getToken());
 		HttpGet httpGet = new HttpGet(uri);
 		
 		JSONObject receivedJSON = getRequest(httpGet);
 		return converter.toTasks(receivedJSON);
+	}
+	
+	/* Add task */
+	public boolean createTask(Task task) {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		params = new ArrayList<NameValuePair>();
+		URI uri = urlComposer(MyConfig.POST_ADD_TASK_URL, auth.getToken()); 
+		HttpPost httpPost = new HttpPost(uri);
+		
+		params.add(new BasicNameValuePair("description", task.getDescription()));
+		
+		try {
+			UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params,HTTP.UTF_8);
+			httpPost.setEntity(ent);
+			if (MyConfig.DEBUG) Log.d("Dev", "Entity has been set with task description");
+			if (MyConfig.DEBUG) Log.d("Dev", "httpPost's entity is " + httpPost.getEntity().toString());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			return false;
+		}
+	    
+		JSONObject receivedJSON = postRequest(httpPost);
+		
+		if (receivedJSON == null) {
+			return false;
+		} 
+		
+		return true;
 	}
 	
 	private JSONObject getRequest(HttpUriRequest requestType) {

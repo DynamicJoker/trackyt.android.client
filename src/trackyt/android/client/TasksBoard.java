@@ -7,6 +7,7 @@ import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.HttpManager;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ public class TasksBoard extends Activity {
 		
 		myAdapter = new MyAdapter(this, R.id.list_view, taskList);
 		listView.setAdapter(myAdapter);
+		listView.setCacheColorHint(Color.WHITE);
 	}
 	
 	public void onClickOKButton(View view) {
@@ -90,10 +92,15 @@ public class TasksBoard extends Activity {
     		
     		/* Setup views from your layout using data in Object*/
     		if (task != null) {
-    			TextView tv = (TextView) v.findViewById(R.id.task_text_view);
+    			TextView tvDescription = (TextView) v.findViewById(R.id.task_text_view);
+    			TextView tvTime = (TextView) v.findViewById(R.id.time_text_view);
     			
-    			if (tv != null) {
-    				tv.setText(task.getDescription());
+    			if (tvDescription != null) {
+    				tvDescription.setText(task.getDescription());
+    			}
+    			
+    			if (tvTime != null) {
+    				tvTime.setText(task.showTime());
     			}
     		}
     		

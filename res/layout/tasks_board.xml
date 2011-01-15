@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
-  android:layout_height="fill_parent" android:orientation="vertical">
+  android:layout_height="fill_parent" 
+  android:orientation="vertical"
+  android:background="#ffffff">
   
   <RelativeLayout
   	android:layout_width="fill_parent"
   	android:layout_height="wrap_content"
   	android:padding="10dp"
-  	android:background="#ffffff">
+  	android:background="#ffffff"
+  	>
   	
   	<Button
  		android:id="@+id/ok_button"
@@ -18,6 +22,7 @@
  		android:layout_height="wrap_content"
  		android:minWidth="60dp"
  		android:layout_alignParentRight="true">
+ 		<requestFocus />
  	</Button> 	
   	
  	<EditText
@@ -34,7 +39,11 @@
 	android:id="@+id/list_view"  	
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
-	android:padding="10dp">
+	android:padding="10dp"
+	android:divider="#206600"
+	android:dividerHeight="2dp"
+	android:smoothScrollbar="true"
+	android:background="#ffffff">
 </ListView>
   
 </LinearLayout>

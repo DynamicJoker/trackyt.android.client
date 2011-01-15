@@ -1,14 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
   android:id="@+id/list_view">
-  
-  	<TextView
-  		android:id="@+id/task_text_view"
-  		android:layout_width="wrap_content"
-  		android:layout_height="wrap_content">
-  	</TextView>  	
+	
+	<RelativeLayout
+		android:id="@+id/r_layout_for_tasks"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#ffffff">
 
+		<ImageView
+			android:id="@+id/icon_image_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:src="@drawable/clock"
+			android:layout_alignParentLeft="true">
+		</ImageView>
+
+	  	<TextView
+	  		android:id="@+id/task_text_view"
+	  		android:layout_width="wrap_content"
+	  		android:layout_height="wrap_content"
+	  		android:paddingLeft="10dp"
+	  		android:textStyle="bold"
+	  		android:textSize="15dp"
+	  		android:textColor="#206600"
+	  		android:layout_toRightOf="@id/icon_image_view"
+	  		android:layout_alignBaseline="@id/icon_image_view">
+	  	</TextView>  	
+		
+		<TextView
+			android:id="@+id/time_text_view"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textStyle="bold"
+	  		android:textSize="15dp"
+	  		android:textColor="#096101"
+			android:layout_alignParentRight="true">
+		</TextView>
+		
+	</RelativeLayout>
 </LinearLayout>

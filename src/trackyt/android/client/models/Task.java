@@ -80,4 +80,8 @@ public class Task {
 		TimeParser timeParser = new TimeParser(spent);
 		time = timeParser.convertToTime();
 	}
+
+	public String showTime() {
+		return (time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+	}
 }

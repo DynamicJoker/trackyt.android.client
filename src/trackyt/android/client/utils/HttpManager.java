@@ -1,15 +1,6 @@
 package trackyt.android.client.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-
+import android.util.Log;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -25,11 +16,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.models.Task;
-import android.util.Log;
+
+import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HttpManager {
 	
@@ -40,7 +35,7 @@ public class HttpManager {
 	private HttpEntity httpEntity;
 	private List<NameValuePair> params;
 	private Converter converter;
-	AuthResponse auth;
+	private AuthResponse auth;
 	
 	private HttpManager() {
 		converter = new Converter();

@@ -14,7 +14,7 @@ public class Credentials {
 	public void setEmail(String email) {
 		if (email.equals("")) {
 			if (MyConfig.DEBUG) Log.d("Credentials", "Empty string for email");
-			throw new IllegalArgumentException();
+			    throw new IllegalArgumentException();
 		}
 		this.email = email;
 	}

@@ -20,15 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity {
-//	Holds all the tasks available
 	ArrayList<Task> taskList;
 	AuthResponse auth;
 	HttpManager httpManager;
 	
-//	ListView adapter
 	MyAdapter myAdapter;
 
-//	UI elements
 	ListView listView;
 	Button okButton;
 	EditText editText;
@@ -38,18 +35,17 @@ public class TasksBoard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tasks_board);
 		
-//		Deserialize received authResponce object
 		Bundle extras = getIntent().getExtras(); 
 		auth = (AuthResponse) extras.getSerializable("auth");
 		
-//		Create httpManager instance and pass token to it
 		httpManager = HttpManager.getInstance();
 		httpManager.initAuth(auth);
 		
-//		Get your tasks from the server
 		taskList = httpManager.getTasks();
+		for (Task t : taskList) {
+			t.parseTime();
+		}
 
-//		Instantiate UI elements
 		okButton = (Button) findViewById(R.id.ok_button);
 		editText = (EditText) findViewById(R.id.edit_text);
 		listView = (ListView) findViewById(R.id.list_view);

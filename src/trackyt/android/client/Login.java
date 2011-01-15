@@ -22,7 +22,7 @@ public class Login extends Activity {
 	EditText loginEditText;
 	EditText passwordEditText;
 	Button loginButton;
-	Button createAccutonButton;
+	Button createAccountButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,27 +31,27 @@ public class Login extends Activity {
 
 		httpManager = HttpManager.getInstance();
 		credentials = new Credentials();
-		
 		loginEditText = (EditText) findViewById(R.id.login_edit_text);
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);
 		loginButton = (Button) findViewById(R.id.login_button);
-		createAccutonButton = (Button) findViewById(R.id.create_account_button);
-		
+		createAccountButton = (Button) findViewById(R.id.create_account_button);
+
 		loginEditText.setText("ebeletskiy@gmail.com");
 		passwordEditText.setText("mikusya");
-		
 	}
 
 	public void loginOnClick(View view) {
 		if (doLogin()) {
 			openTasksBoardActivity();
 		} else {
-			Toast.makeText(this, "Loging wasn't successfull, try again", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Loging wasn't successfull, try again",
+					Toast.LENGTH_SHORT).show();
 		}
-	}
-	
+    }
+
 	public void createAccountOnClick(View view) {
 		Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
+
 		// TODO: implement createAccountOnClick()
 	}
 
@@ -59,8 +59,8 @@ public class Login extends Activity {
 		if (!updateCredentials()) {
 			return false;
 		}
+
 		authResponse = httpManager.login(credentials);
-		
 		return authResponse.getLogin();
 	}
 
@@ -79,9 +79,10 @@ public class Login extends Activity {
 	}
 
 	private void openTasksBoardActivity() {
-		 Intent intent = new Intent(Login.this, TasksBoard.class);
-		 // Pass authResponse object to TasksBoard activity
-		 intent.putExtra("auth", authResponse);
-		 Login.this.startActivity(intent);
+		Intent intent = new Intent(Login.this, TasksBoard.class);
+		// Pass authResponse object to TasksBoard activity
+		intent.putExtra("auth", authResponse);
+		Login.this.startActivity(intent);
+
 	}
 }

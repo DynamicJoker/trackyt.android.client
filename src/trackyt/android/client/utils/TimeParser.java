@@ -8,6 +8,11 @@ public class TimeParser {
     private int receivedTime; 
     private Time time; 
     
+    
+    // TODO: 1. remove receivedTime from instance variables
+    // 2. Pass it to converToTime() directly
+    // 3. Make it static
+    
     public TimeParser(int taskTime) {
     	receivedTime = taskTime;
     	time = new Time();

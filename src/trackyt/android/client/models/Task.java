@@ -77,8 +77,7 @@ public class Task {
 	}
 	
 	public void parseTime() {
-		TimeParser timeParser = new TimeParser(spent);
-		time = timeParser.convertToTime();
+		time = TimeParser.convertToTime(spent);
 	}
 
 	public String showTime() {

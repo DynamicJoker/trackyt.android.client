@@ -3,43 +3,22 @@ package trackyt.android.client.utils;
 import trackyt.android.client.models.Time;
 public class TimeParser {
 	
-    private final int ONE_MINUTE = 60;
-    private final int ONE_HOUR = 3600;
-    private int receivedTime; 
-    private Time time; 
+    private static final int ONE_MINUTE = 60;
+    private static final int ONE_HOUR = 3600;
     
-    
-    // TODO: 1. remove receivedTime from instance variables
-    // 2. Pass it to converToTime() directly
-    // 3. Make it static
-    
-    public TimeParser(int taskTime) {
-    	receivedTime = taskTime;
-    	time = new Time();
-    }
-
-    public Time convertToTime(){
-        if(calculateHours()) {
-        	if(calculateMinutes()) {
-        		calculateSeconds();
-        	}
-        }
-
-        return time;
-    }
-    
-    private boolean calculateHours() {
+    public static Time convertToTime(int receivedTime){
+    	Time time = new Time();
+    	
     	time.setHours(receivedTime / ONE_HOUR);
-    	return ((receivedTime = receivedTime % ONE_HOUR) != 0);
+    	if ((receivedTime %= ONE_HOUR) != 0){
+    		time.setMinutes(receivedTime / ONE_MINUTE);
+    		if ((receivedTime %= ONE_MINUTE) != 0) {
+    			time.setSeconds(receivedTime);
+    		}
+    	}
+    	
+    	return time;
     }
     
-    private boolean calculateMinutes() {
-    	time.setMinutes(receivedTime / ONE_MINUTE);
-    	return ((receivedTime = receivedTime % ONE_MINUTE) != 0);
-    }
-    
-    private void calculateSeconds() {
-    	time.setSeconds(receivedTime);
-    }
 }
 	

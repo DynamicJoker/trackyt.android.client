@@ -71,7 +71,7 @@ public class HttpManager {
 			e.printStackTrace();
 		}
 	    
-		JSONObject receivedJSON = postRequest(httpPost);
+		JSONObject receivedJSON = request(httpPost);
 		return converter.toAuthResponse(receivedJSON);
 	}
 	
@@ -86,7 +86,7 @@ public class HttpManager {
 		URI uri = urlComposer(MyConfig.GET_TASKS_URL, auth.getToken());
 		HttpGet httpGet = new HttpGet(uri);
 		
-		JSONObject receivedJSON = getRequest(httpGet);
+		JSONObject receivedJSON = request(httpGet);
 		return converter.toTasks(receivedJSON);
 	}
 	
@@ -112,7 +112,7 @@ public class HttpManager {
 			return false;
 		}
 	    
-		JSONObject receivedJSON = postRequest(httpPost);
+		JSONObject receivedJSON = request(httpPost);
 		
 		if (receivedJSON == null) {
 			return false;
@@ -121,7 +121,12 @@ public class HttpManager {
 		return true;
 	}
 	
-	private JSONObject getRequest(HttpUriRequest requestType) {
+	public boolean deleteTask(Task task) {
+		
+		return true; 
+	}
+	
+	private JSONObject request(HttpUriRequest requestType) {
 		httpClient = new DefaultHttpClient();
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager's getRequest() invoked");
 		try {
@@ -148,35 +153,6 @@ public class HttpManager {
 		} finally {
 			httpClient.getConnectionManager().shutdown();
 		}
-	}
-	
-	private JSONObject postRequest(HttpUriRequest requestType) {
-		try {
-			httpClient = new DefaultHttpClient();
-			httpResponse = httpClient.execute(requestType);
-			if (MyConfig.DEBUG) Log.d("Dev", "Response from the Server, Status Line: " + httpResponse.getStatusLine().toString());
-			
-			if (httpResponse != null) {
-				httpEntity = httpResponse.getEntity();
-				if (MyConfig.DEBUG) Log.d("Dev", "Entity from the response obtained");
-			
-				if (httpEntity != null) {
-					InputStream instream = httpEntity.getContent(); 
-					String convertedString = convertStreamToString(instream);
-					return convertToJSON(convertedString);
-				} else return null;
-				
-			} else return null;
-			
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (MyConfig.DEBUG) Log.d("Dev", "httpClient.shutdown()");
-			httpClient.getConnectionManager().shutdown();
-		}
-		return null;
 	}
 	
 	/*Reads data from InputStream and put it in String*/
@@ -251,12 +227,6 @@ public class HttpManager {
 			e.printStackTrace();
 		}
     	return null;
-    }
-    
-    
-    
-    private void setParams(String key, String value) {
-    	params.add(new BasicNameValuePair(key, value));
     }
 	
 }

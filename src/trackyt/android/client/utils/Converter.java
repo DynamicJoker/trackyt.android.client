@@ -37,22 +37,13 @@ public class Converter {
 		}		
 	}
 	
-	public ArrayList<Task> toTasks(JSONObject json) {
+	public ArrayList<Task> jsonToTasks(JSONObject json) {
 		ArrayList<Task> list = new ArrayList<Task>();
 		
-		if(MyConfig.DEBUG) {
-			Log.d("Dev", "convertJsonInTasks() invoked");
-			Log.d("Dev", "received json: " + json.toString());
-		}
-		
-		JSONObject tmp;
 		try {
-			tmp = json.getJSONObject("data");
-			if(MyConfig.DEBUG) Log.d("Dev", "Json object obtained: " + tmp.toString());
-			
+			JSONObject tmp = json.getJSONObject("data");
 			JSONArray array = tmp.getJSONArray("tasks");
-			if(MyConfig.DEBUG) Log.d("Dev", "Json tasks obtained: " + array.toString());
-
+			
 			for (int i = 0; i < array.length(); i++) {
 				Task task = new Task();
 				task.setId(((JSONObject)array.get(i)).optInt("id"));

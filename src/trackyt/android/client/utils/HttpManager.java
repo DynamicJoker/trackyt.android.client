@@ -1,12 +1,22 @@
 package trackyt.android.client.utils;
 
-import android.util.Log;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -16,19 +26,15 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.models.Task;
-
-import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import android.util.Log;
 
 public class HttpManager {
 	
-	private static HttpManager httpManager = new HttpManager(); 
+	private static final HttpManager HTTP_MANAGER = new HttpManager(); 
 	
 	private HttpClient httpClient;
 	private HttpResponse httpResponse;
@@ -37,13 +43,15 @@ public class HttpManager {
 	private Converter converter;
 	private AuthResponse auth;
 	
+	private JSONObject tempJSON;
+	
 	private HttpManager() {
 		converter = new Converter();
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager created");
 	}
 
 	public static HttpManager getInstance() {
-		return httpManager;
+		return HTTP_MANAGER;
 	}
 	
 	public void initAuth(AuthResponse auth) {
@@ -53,7 +61,6 @@ public class HttpManager {
 		this.auth = auth;
 	}
 
-	/* Login */
 	public AuthResponse login(Credentials credentials) {
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer(MyConfig.POST_AUTH_URL);
@@ -75,7 +82,6 @@ public class HttpManager {
 		return converter.toAuthResponse(receivedJSON);
 	}
 	
-	/* Get tasks */
 	public ArrayList<Task> getTasks() {
 		if (auth == null) {
 			throw new NullPointerException("auth is null");
@@ -87,10 +93,9 @@ public class HttpManager {
 		HttpGet httpGet = new HttpGet(uri);
 		
 		JSONObject receivedJSON = request(httpGet);
-		return converter.toTasks(receivedJSON);
+		return converter.jsonToTasks(receivedJSON);
 	}
 	
-	/* Add task */
 	public boolean createTask(Task task) {
 		if (auth == null) {
 			throw new NullPointerException();
@@ -122,11 +127,24 @@ public class HttpManager {
 	}
 	
 	public boolean deleteTask(Task task) {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		URI uri = urlComposer(MyConfig.DELETE_TASK_URL, auth.getToken()); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
+		HttpDelete httpDelete = new HttpDelete(urlToSend);
+		
+		JSONObject temp = request(httpDelete);
+		
+		if (temp == null)  
+			return false; 
 		
 		return true; 
 	}
 	
 	private JSONObject request(HttpUriRequest requestType) {
+		
 		httpClient = new DefaultHttpClient();
 		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager's getRequest() invoked");
 		try {
@@ -154,7 +172,8 @@ public class HttpManager {
 			httpClient.getConnectionManager().shutdown();
 		}
 	}
-	
+		
+		
 	/*Reads data from InputStream and put it in String*/
 	private String convertStreamToString(InputStream instream) {
 		if (MyConfig.DEBUG) Log.d("Dev", "convertStreamToString() invoked");
@@ -203,6 +222,27 @@ public class HttpManager {
     	URI uri = null;
     	try {
 			uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, apiUri, null, null);
+			return uri;	
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
+    
+    private URI urlComposer(String apiUri, String token) { 
+    	URI uri = null;
+    	try {
+    		
+//    		if(apiUri.equals("POST_AUTH_URL")) {
+//    			uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, apiUri, null, null);
+//    		}
+    		
+    		String tmp = apiUri.toString();
+			String[] array = tmp.split("<token>");
+			tmp = array[0] + auth.getToken() + array[1];
+			
+			uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, tmp, null, null);
+    		
 			if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
 			return uri;	
 		} catch (URISyntaxException e) {
@@ -212,21 +252,4 @@ public class HttpManager {
     	return null;
     }
     
-    private URI urlComposer(String apiUri, String token) {
-    	URI uri = null;
-    	try {
-    		String tmp = apiUri.toString();
-    		String[] array = tmp.split("<token>");
-    		tmp = array[0] + token + array[1];
-    		
-    		uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, tmp, null, null);
-			if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
-			return uri;	
-		} catch (URISyntaxException e) {
-			if (MyConfig.DEBUG) Log.d("Dev", "urlComposer was unable to construct a URL"); 
-			e.printStackTrace();
-		}
-    	return null;
-    }
-	
 }

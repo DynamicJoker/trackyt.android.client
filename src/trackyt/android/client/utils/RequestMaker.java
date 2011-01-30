@@ -40,11 +40,13 @@ public class RequestMaker {
 	private List<NameValuePair> params;
 	private Converter converter;
 	private AuthResponse auth;
+	private UrlComposer urlComposer;
 	
 	private RequestMaker() {
 		converter = new Converter();
 		httpManager = new HttpManager();
-		if (MyConfig.DEBUG) Log.d("Dev", "HttpManager created");
+		urlComposer = new UrlComposer();
+		if (MyConfig.DEBUG) Log.d("Dev", "RequestMaker created");
 	}
 
 	public static RequestMaker getInstance() {
@@ -60,7 +62,7 @@ public class RequestMaker {
 
 	public AuthResponse login(Credentials credentials) {
 		params = new ArrayList<NameValuePair>();
-		URI uri = httpManager.urlComposer(MyConfig.POST_AUTH_URL);
+		URI uri = urlComposer.composeUrl(MyConfig.POST_AUTH_URL);
 		HttpPost httpPost = new HttpPost(uri);
 		
 		params.add(new BasicNameValuePair("email", credentials.getEmail()));
@@ -86,7 +88,7 @@ public class RequestMaker {
 		
 		Converter converter = new Converter();
 
-		URI uri = httpManager.urlComposer(MyConfig.GET_TASKS_URL, auth.getToken());
+		URI uri = urlComposer.composeUrl(MyConfig.GET_TASKS_URL, auth.getToken());
 		HttpGet httpGet = new HttpGet(uri);
 		
 		JSONObject receivedJSON = httpManager.request(httpGet);
@@ -99,7 +101,7 @@ public class RequestMaker {
 		}
 		
 		params = new ArrayList<NameValuePair>();
-		URI uri = httpManager.urlComposer(MyConfig.POST_ADD_TASK_URL, auth.getToken()); 
+		URI uri = urlComposer.composeUrl(MyConfig.POST_ADD_TASK_URL, auth.getToken()); 
 		HttpPost httpPost = new HttpPost(uri);
 		
 		params.add(new BasicNameValuePair("description", task.getDescription()));
@@ -128,7 +130,7 @@ public class RequestMaker {
 			throw new NullPointerException();
 		}
 		
-		URI uri = httpManager.urlComposer(MyConfig.DELETE_TASK_URL, auth.getToken()); 
+		URI uri = urlComposer.composeUrl(MyConfig.DELETE_TASK_URL, auth.getToken()); 
 		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
 		HttpDelete httpDelete = new HttpDelete(urlToSend);
 		

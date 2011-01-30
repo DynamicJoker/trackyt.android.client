@@ -2,7 +2,7 @@ package trackyt.android.client;
 
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
-import trackyt.android.client.utils.HttpManager;
+import trackyt.android.client.utils.RequestMaker;
 import trackyt.android.client.utils.MyConfig;
 import android.app.Activity;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class Login extends Activity {
 
-	HttpManager httpManager;
+	RequestMaker httpManager;
 	Credentials credentials;
 	AuthResponse authResponse;
 
@@ -29,7 +29,7 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
-		httpManager = HttpManager.getInstance();
+		httpManager = RequestMaker.getInstance();
 		credentials = new Credentials();
 		loginEditText = (EditText) findViewById(R.id.login_edit_text);
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);

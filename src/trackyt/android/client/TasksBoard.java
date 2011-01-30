@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.utils.HttpManager;
+import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +22,7 @@ import android.widget.Toast;
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList;
 	AuthResponse auth;
-	HttpManager httpManager;
+	RequestMaker httpManager;
 	
 	MyAdapter myAdapter;
 
@@ -40,7 +38,7 @@ public class TasksBoard extends Activity {
 		Bundle extras = getIntent().getExtras(); 
 		auth = (AuthResponse) extras.getSerializable("auth");
 		
-		httpManager = HttpManager.getInstance();
+		httpManager = RequestMaker.getInstance();
 		httpManager.initAuth(auth);
 		
 		taskList = httpManager.getTasks();
@@ -56,15 +54,15 @@ public class TasksBoard extends Activity {
 		listView.setAdapter(myAdapter);
 		listView.setCacheColorHint(Color.WHITE);
 		
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				Task task = (Task) listView.getItemAtPosition(position);
-				httpManager.deleteTask(task);
-			}
-			
-		});
+//		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//	
+//			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//					long arg3) {
+//				Task task = (Task) listView.getItemAtPosition(position);
+//				httpManager.deleteTask(task);
+//			}
+//			
+//		});
 	}
 	
 	public void onClickOKButton(View view) {

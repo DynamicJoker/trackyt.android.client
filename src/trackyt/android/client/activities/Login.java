@@ -1,5 +1,8 @@
-package trackyt.android.client;
+package trackyt.android.client.activities;
 
+import trackyt.android.client.R;
+import trackyt.android.client.R.id;
+import trackyt.android.client.R.layout;
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.utils.RequestMaker;

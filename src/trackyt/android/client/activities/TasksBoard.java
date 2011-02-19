@@ -1,17 +1,18 @@
-package trackyt.android.client;
+package trackyt.android.client.activities;
 
 import java.util.ArrayList;
 
+import trackyt.android.client.MDialog;
+import trackyt.android.client.R;
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -23,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity {
-	ArrayList<Task> taskList;
+	ArrayList<Task> taskList; // TODO: change to Map
 	AuthResponse auth;
 	RequestMaker requestMaker;
 	
@@ -46,14 +47,8 @@ public class TasksBoard extends Activity {
 		requestMaker = RequestMaker.getInstance();
 		requestMaker.initAuth(auth);
 		
-		taskList = requestMaker.getTasks();
-		for (Task t : taskList) {
-			t.parseTime();
-		}
-
-		okButton = (Button) findViewById(R.id.ok_button);
-		editText = (EditText) findViewById(R.id.edit_text);
-		listView = (ListView) findViewById(R.id.list_view);
+		getTasks();
+		initialize();
 		
 		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
 		listView.setAdapter(mAdapter);
@@ -74,6 +69,19 @@ public class TasksBoard extends Activity {
 		
 	}
 	
+	private void initialize() {
+		okButton = (Button) findViewById(R.id.ok_button);
+		editText = (EditText) findViewById(R.id.edit_text);
+		listView = (ListView) findViewById(R.id.list_view);
+	}
+
+	private void getTasks() {
+		taskList = requestMaker.getTasks();
+		for (Task t : taskList) {
+			t.parseTime(); // TODO: Remove this somewhere
+		}
+	}
+
 	public void onClickOKButton(View view) {
 		String taskDescription = editText.getText().toString();
 		Task task = new Task(taskDescription);
@@ -131,5 +139,14 @@ public class TasksBoard extends Activity {
 	protected void onResume() {
 		super.onResume();
 		mAdapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, 0, Menu.NONE, R.string.start_all);
+		menu.add(1, 1, Menu.NONE, R.string.stop_all);
+		menu.add(2, 2, Menu.NONE, R.string.delete_all);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 }

@@ -9,7 +9,7 @@ public class MyConfig {
 	public static final String GET_TASKS_URL = "/api/v1.1/<token>/tasks/all/";
 	public static final String POST_ADD_TASK_URL = "/api/v1.1/<token>/tasks/add/";
 	public static final String DELETE_TASK_URL = "/api/v1.1/<token>/tasks/delete/";
-	public static final String PUT_START_TASK_URL = "/api/v.1.1/<token>/start/";
+	public static final String PUT_START_TASK_URL = "/api/v1.1/<token>/start/";
 	public static final String PUT_STOP_TASK_URL = "/api/v1.1/<token>/stop/";
 	public static final String PUT_START_ALL_TASK_URL = "/api/v1.1/<token>/start/all/";
 	public static final String PUT_STOP_ALL_TASK_URL = "/api/v1.1/<token>/stop/all/";

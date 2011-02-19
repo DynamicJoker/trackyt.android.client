@@ -1,30 +1,18 @@
 package trackyt.android.client.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import trackyt.android.client.models.AuthResponse;
@@ -95,7 +83,7 @@ public class RequestMaker {
 		return converter.jsonToTasks(receivedJSON);
 	}
 	
-	public boolean createTask(Task task) {
+	public boolean addTask(Task task) {
 		if (auth == null) {
 			throw new NullPointerException();
 		}
@@ -141,5 +129,54 @@ public class RequestMaker {
 		
 		return true; 
 	}
+	
+	public boolean startTask(Task task) {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		Log.d("Dev", "startTask() invoked");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_TASK_URL, auth.getToken()); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
+		Log.d("Dev", "Final URL to use: " + urlToSend);
+		HttpPut httpPut = new HttpPut(urlToSend);
+		
+		JSONObject temp = httpManager.request(httpPut);
+		
+		if (temp == null)  
+			return false; 
+		
+		return true; 
+		
+		// TODO: A lot of double code among methods, encapsulation to be considered.
+	}
+	
+	public boolean stopTask(Task task) {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		Log.d("Dev", "stopTask() invoked");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_TASK_URL, auth.getToken()); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
+		Log.d("Dev", "Final URL to use: " + urlToSend);
+		HttpPut httpPut = new HttpPut(urlToSend);
+		
+		JSONObject temp = httpManager.request(httpPut);
+		
+		if (temp == null)  
+			return false; 
+		
+		return true; 
+	}
     
+	public void startAllTasks() {
+		// TODO: To be implemented
+	}
+	
+	public void stopAllTasks() {
+		// TODO: To be implemented
+	}
 }

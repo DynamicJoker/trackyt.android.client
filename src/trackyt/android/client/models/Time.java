@@ -1,16 +1,10 @@
 package trackyt.android.client.models;
 
-import trackyt.android.client.utils.MyConfig;
-import android.util.Log;
 
 public class Time {
     private int seconds;
     private int minutes;
     private int hours;
-    
-    public Time() {
-    	if (MyConfig.DEBUG) Log.d("Dev", "Time object created");
-    }
     
 	public int getSeconds() {
 		return seconds;

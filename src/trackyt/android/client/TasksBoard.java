@@ -6,12 +6,15 @@ import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,13 +25,15 @@ import android.widget.Toast;
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList;
 	AuthResponse auth;
-	RequestMaker httpManager;
+	RequestMaker requestMaker;
 	
-	MyAdapter myAdapter;
+	MyAdapter mAdapter;
 
 	ListView listView;
 	Button okButton;
 	EditText editText;
+	
+	MDialog mDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +43,10 @@ public class TasksBoard extends Activity {
 		Bundle extras = getIntent().getExtras(); 
 		auth = (AuthResponse) extras.getSerializable("auth");
 		
-		httpManager = RequestMaker.getInstance();
-		httpManager.initAuth(auth);
+		requestMaker = RequestMaker.getInstance();
+		requestMaker.initAuth(auth);
 		
-		taskList = httpManager.getTasks();
+		taskList = requestMaker.getTasks();
 		for (Task t : taskList) {
 			t.parseTime();
 		}
@@ -50,28 +55,33 @@ public class TasksBoard extends Activity {
 		editText = (EditText) findViewById(R.id.edit_text);
 		listView = (ListView) findViewById(R.id.list_view);
 		
-		myAdapter = new MyAdapter(this, R.id.list_view, taskList);
-		listView.setAdapter(myAdapter);
+		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
+		listView.setAdapter(mAdapter);
 		listView.setCacheColorHint(Color.WHITE);
 		
-//		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//	
-//			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-//					long arg3) {
-//				Task task = (Task) listView.getItemAtPosition(position);
-//				httpManager.deleteTask(task);
-//			}
-//			
-//		});
+		mDialog = new MDialog(this);
+		
+		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				Task task = (Task) listView.getItemAtPosition(position);
+				mDialog.setTask(task);
+				mDialog.show();
+				return false;
+			}
+		});
+		
 	}
 	
 	public void onClickOKButton(View view) {
 		String taskDescription = editText.getText().toString();
 		Task task = new Task(taskDescription);
+		task.parseTime();
 		taskList.add(task);
-		if (httpManager.createTask(task)) {
+		if (requestMaker.addTask(task)) {
 			Toast.makeText(this, "Task has been created", Toast.LENGTH_SHORT).show();
-			myAdapter.notifyDataSetChanged();
+			mAdapter.notifyDataSetChanged();
 		} else {
 			Toast.makeText(this, "Task has not been created, try again", Toast.LENGTH_SHORT).show();
 		}
@@ -116,4 +126,10 @@ public class TasksBoard extends Activity {
     		return v;
     	}
     }
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mAdapter.notifyDataSetChanged();
+	}
 }

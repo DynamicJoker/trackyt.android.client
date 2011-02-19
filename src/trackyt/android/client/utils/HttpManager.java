@@ -52,11 +52,12 @@ public class HttpManager {
 			return null;
 		} finally {
 			httpClient.getConnectionManager().shutdown();
+			Log.d("Dev", "End of httpManager method");
 		}
 	}
 
 	/*Reads data from InputStream and put it in String*/
-	public String convertStreamToString(InputStream instream) {
+	private String convertStreamToString(InputStream instream) {
 		if (MyConfig.DEBUG) Log.d("Dev", "convertStreamToString() invoked");
 		BufferedReader buffReader = new BufferedReader(new InputStreamReader(instream));	
 		StringBuilder stringBuilder = new StringBuilder();
@@ -82,7 +83,7 @@ public class HttpManager {
 	}
 
 	/*Converts String to JSON*/
-	public JSONObject convertToJSON(String string) {
+	private JSONObject convertToJSON(String string) {
 		if (MyConfig.DEBUG) Log.d("Dev", "convertToJSON() invoked");
 		if (string.equals("")) {
 			if (MyConfig.DEBUG) Log.d("Dev", "Sting is null, nothing to be converted");

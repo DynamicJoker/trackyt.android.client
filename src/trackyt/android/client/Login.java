@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 public class Login extends Activity {
 
-	RequestMaker httpManager;
+	RequestMaker requestMaker;
 	Credentials credentials;
 	AuthResponse authResponse;
 
@@ -29,7 +29,7 @@ public class Login extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
-		httpManager = RequestMaker.getInstance();
+		requestMaker = RequestMaker.getInstance();
 		credentials = new Credentials();
 		loginEditText = (EditText) findViewById(R.id.login_edit_text);
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);
@@ -60,13 +60,11 @@ public class Login extends Activity {
 			return false;
 		}
 
-		authResponse = httpManager.login(credentials);
+		authResponse = requestMaker.login(credentials);
 		return authResponse.getLogin();
 	}
 
 	private boolean updateCredentials() {
-		if (MyConfig.DEBUG)
-			Log.d("Dev", "updateCredentials() invoked");
 		if (loginEditText.getText().toString().equals("")
 				&& passwordEditText.getText().toString().equals("")) {
 			return false;

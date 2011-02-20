@@ -26,7 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity {
-	ArrayList<Task> taskList; // TODO: change to Map
+	ArrayList<Task> taskList = new ArrayList<Task>(); // TODO: change to Map
 	AuthResponse auth;
 	RequestMaker requestMaker;
 	
@@ -43,18 +43,21 @@ public class TasksBoard extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.tasks_board);
 		
+		// TODO: No need to pass data as extras, pass auth obj to
+		// requestMaker just after authentication
 		Bundle extras = getIntent().getExtras(); 
 		auth = (AuthResponse) extras.getSerializable("auth");
 		
 		requestMaker = RequestMaker.getInstance();
 		requestMaker.initAuth(auth);
 		
-		getTasks();
 		initialize();
 		
 		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
 		listView.setAdapter(mAdapter);
 		listView.setCacheColorHint(Color.WHITE);
+		
+		getTasks();
 		
 		mDialog = new MDialog(this);
 		
@@ -82,6 +85,7 @@ public class TasksBoard extends Activity {
 		for (Task t : taskList) {
 			t.parseTime(); // TODO: Remove this somewhere
 		}
+		mAdapter.notifyDataSetChanged();
 	}
 
 	public void onClickOKButton(View view) {
@@ -161,6 +165,9 @@ public class TasksBoard extends Activity {
 	    case R.id.stop_all:
 	        requestMaker.stopAllTasks();
 	        return true;
+	    case R.id.menu_refresh:
+	    	getTasks();
+	    	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }

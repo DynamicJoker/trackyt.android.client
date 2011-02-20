@@ -161,9 +161,6 @@ public class TasksBoard extends Activity {
 	    case R.id.stop_all:
 	        requestMaker.stopAllTasks();
 	        return true;
-	    case R.id.delete_all:
-	    	requestMaker.deleteAllTasks();
-	    	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
 	    }

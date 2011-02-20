@@ -172,15 +172,39 @@ public class RequestMaker {
 		return true; 
 	}
     
-	public void startAllTasks() {
-		// TODO: startAllTasks() to be implemented
+	public boolean startAllTasks() {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		Log.d("Dev", "startAllTask() invoked");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_ALL_TASK_URL, auth.getToken()); 
+		HttpPut httpPut = new HttpPut(uri);
+		
+		JSONObject temp = httpManager.request(httpPut);
+		
+		if (temp == null)  
+			return false; 
+		
+		return true;
 	}
 	
-	public void stopAllTasks() {
-		// TODO: stopAllTasks() to be implemented
-	}
-	
-	public void deleteAllTasks() {
-		// TODO: deleteAllTasks() to be implemented
+	public boolean stopAllTasks() {
+		if (auth == null) {
+			throw new NullPointerException();
+		}
+		
+		Log.d("Dev", "stopAllTask() invoked");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_ALL_TASK_URL, auth.getToken()); 
+		HttpPut httpPut = new HttpPut(uri);
+		
+		JSONObject temp = httpManager.request(httpPut);
+		
+		if (temp == null)  
+			return false; 
+		
+		return true;
 	}
 }

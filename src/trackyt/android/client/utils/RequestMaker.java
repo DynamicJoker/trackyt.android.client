@@ -179,4 +179,8 @@ public class RequestMaker {
 	public void stopAllTasks() {
 		// TODO: stopAllTasks() to be implemented
 	}
+	
+	public void deleteAllTasks() {
+		// TODO: deleteAllTasks() to be implemented
+	}
 }

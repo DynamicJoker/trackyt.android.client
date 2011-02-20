@@ -13,6 +13,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -143,10 +145,27 @@ public class TasksBoard extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, 0, Menu.NONE, R.string.start_all);
-		menu.add(1, 1, Menu.NONE, R.string.stop_all);
-		menu.add(2, 2, Menu.NONE, R.string.delete_all);
+		
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.taskboard_menu, menu);
 		
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.start_all:
+	        requestMaker.startAllTasks();
+	        return true;
+	    case R.id.stop_all:
+	        requestMaker.stopAllTasks();
+	        return true;
+	    case R.id.delete_all:
+	    	requestMaker.deleteAllTasks();
+	    	return true;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
 	}
 }

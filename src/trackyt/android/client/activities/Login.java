@@ -1,16 +1,15 @@
 package trackyt.android.client.activities;
 
 import trackyt.android.client.R;
-import trackyt.android.client.R.id;
-import trackyt.android.client.R.layout;
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.utils.RequestMaker;
-import trackyt.android.client.utils.MyConfig;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +25,9 @@ public class Login extends Activity {
 	EditText passwordEditText;
 	Button loginButton;
 	Button createAccountButton;
+	
+	ProgressDialog progressDialog;
+	Handler mHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,18 +40,16 @@ public class Login extends Activity {
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);
 		loginButton = (Button) findViewById(R.id.login_button);
 		createAccountButton = (Button) findViewById(R.id.create_account_button);
+		mHandler = new Handler();
 
 		loginEditText.setText("ebeletskiy@gmail.com");
 		passwordEditText.setText("mikusya");
 	}
 
 	public void loginOnClick(View view) {
-		if (doLogin()) {
-			openTasksBoardActivity();
-		} else {
-			Toast.makeText(this, "Loging wasn't successfull, try again",
-					Toast.LENGTH_SHORT).show();
-		}
+		Thread mThread = new Thread(new LoginJob());
+		progressDialog = ProgressDialog.show(this, "Loging in...", "Please wait a bit", true, false);
+		mThread.start();
     }
 
 	public void createAccountOnClick(View view) {
@@ -64,6 +64,8 @@ public class Login extends Activity {
 		}
 
 		authResponse = requestMaker.login(credentials);
+		if (authResponse == null)
+			return false;
 		return authResponse.getLogin();
 	}
 
@@ -80,10 +82,27 @@ public class Login extends Activity {
 	}
 
 	private void openTasksBoardActivity() {
+		progressDialog.dismiss();
 		Intent intent = new Intent(Login.this, TasksBoard.class);
-		// Pass authResponse object to TasksBoard activity
 		intent.putExtra("auth", authResponse);
 		Login.this.startActivity(intent);
+	}
+	
+	class LoginJob implements Runnable {
 
+		public void run() {
+			if (doLogin()) {
+				openTasksBoardActivity();
+			} else {
+				mHandler.post(new Runnable() {
+					public void run() { updateGUI(); }
+				});
+			}
+		}
+	}
+	
+	private void updateGUI() {
+		Toast.makeText(this, "Login wasn't successful", Toast.LENGTH_SHORT).show();
+		progressDialog.dismiss();
 	}
 }

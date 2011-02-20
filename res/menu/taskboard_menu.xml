@@ -12,10 +12,4 @@
 		android:visible="true">
 	</item>
 	
-	<item 
-		android:id="@+id/delete_all" 
-		android:title="Delete All"
-		android:visible="true">
-	</item>
-	
 </menu>

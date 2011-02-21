@@ -1,9 +1,11 @@
 package trackyt.android.client.activities;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import trackyt.android.client.MDialog;
 import trackyt.android.client.R;
+import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.RequestMaker;
@@ -13,6 +15,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList; // TODO: change to Map
@@ -41,8 +43,7 @@ public class TasksBoard extends Activity {
 	MDialog itemPressDialog;
 	ProgressDialog pDialogGetTasks;
 	
-	Handler mHandlerLoadTasks;
-	Handler mHandlerSetupListView;
+	TimeController timeController;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +58,15 @@ public class TasksBoard extends Activity {
 		requestMaker = RequestMaker.getInstance();
 		requestMaker.initAuth(auth);
 		// ---------------------------------------------------
-		itemPressDialog = new MDialog(this);
-		mHandlerLoadTasks = new Handler();
-		mHandlerSetupListView = new Handler(); 
+		timeController = new TimeController(this);
+		itemPressDialog = new MDialog(timeController, this);
 		
 		initializeControls();
-		loadTasks();
+		
+		timeController.loadTasks();
+		delay();
+		setupListView();
+		timeController.runCount();
 		
 		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -76,78 +80,55 @@ public class TasksBoard extends Activity {
 		});
 	}
 	
-	private void loadTasks() {
-		Thread t = new Thread(new Runnable() {
-
-			public void run() {
-				mHandlerLoadTasks.post(new Runnable(){
-
-					public void run() {
-						updateGuiLoadTasks();
-					}
-					
-				});
-				
-				getTasks();
-				
-				mHandlerSetupListView.post(new Runnable() {
-
-					public void run() {
-						setupListView();
-						pDialogGetTasks.dismiss();
-					}
-					
-				});
-			}
-			
-		});
-		t.start();
-	}
-
-	private void updateGuiLoadTasks() {
-		pDialogGetTasks = pDialogGetTasks.show(this, "Getting tasks", "Loading your tasks, please wait", true, false);
-	}
 	
-	private void setupListView() {
-		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
-		listView.setAdapter(mAdapter);
-		listView.setCacheColorHint(Color.WHITE);		
-	}
 
-	private void initializeControls() {
-		okButton = (Button) findViewById(R.id.ok_button);
-		editText = (EditText) findViewById(R.id.edit_text);
-		listView = (ListView) findViewById(R.id.list_view);
-	}
-
-	private void getTasks() {
-		taskList = requestMaker.getTasks();
+	public void initTaskList(List<Task> list) {
+		Log.d("Dev", "Task list initialized");
+		this.taskList = (ArrayList<Task>)list;
 		for (Task t : taskList) {
 			t.parseTime(); // TODO: Remove this somewhere
 		}
 	}
 
-	public void onClickOKButton(View view) {
-		String taskDescription = editText.getText().toString();
-		Task task = new Task(taskDescription);
-		task.parseTime();
-		taskList.add(0, task);
-		if (requestMaker.addTask(task)) {
-			Toast.makeText(this, "Task has been created", Toast.LENGTH_SHORT).show();
-			mAdapter.notifyDataSetChanged();
-		} else {
-			Toast.makeText(this, "Task has not been created, try again", Toast.LENGTH_SHORT).show();
-		}
-		
-		editText.setText("");
+	public List<Task> getTaskList() {
+		return taskList;
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-//		mAdapter.notifyDataSetChanged();
+
+
+	public void updateUI() {
+		mAdapter.notifyDataSetChanged();
+	}
+
+
+
+	public void onClickOKButton(View view) { 
+		
+		String taskDescription = editText.getText().toString();
+		final Task task = new Task(taskDescription);
+		task.parseTime();
+		taskList.add(task);
+		timeController.addNewTask(task);
+		timeController.loadTasks();
+		editText.setText("");
 	}
 	
+
+	public void showLoadTaskDialog() {
+		pDialogGetTasks = pDialogGetTasks.show(this, "Getting tasks", 
+				"Loading your tasks, please wait", true, false);
+	}
+
+
+
+	public void dismissLoadTaskDialog() {
+		if (pDialogGetTasks != null) 
+		pDialogGetTasks.dismiss();
+		
+	}
+
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		
@@ -161,13 +142,13 @@ public class TasksBoard extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.start_all:
-	        requestMaker.startAllTasks();
+	    	timeController.startAll();
 	        return true;
 	    case R.id.stop_all:
-	        requestMaker.stopAllTasks();
+	    	timeController.stopAll();
 	        return true;
 	    case R.id.menu_refresh:
-	    	getTasks();
+	    	timeController.loadTasks();
 	    	return true;
 	    default:
 	        return super.onOptionsItemSelected(item);
@@ -211,4 +192,26 @@ public class TasksBoard extends Activity {
 			return v;
 		}
 	}
+
+	private void delay() {
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void setupListView() {
+		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
+		listView.setAdapter(mAdapter);
+		listView.setCacheColorHint(Color.WHITE);		
+	}
+
+	private void initializeControls() {
+		okButton = (Button) findViewById(R.id.ok_button);
+		editText = (EditText) findViewById(R.id.edit_text);
+		listView = (ListView) findViewById(R.id.list_view);
+	}
+
 }

@@ -1,7 +1,7 @@
 package trackyt.android.client;
 
+import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.utils.RequestMaker;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -12,15 +12,15 @@ import android.widget.TextView;
 public class MDialog extends Dialog {
 	
 	Task task;
-	RequestMaker requestMaker;
+	TimeController timeController;
 	
 	TextView startTask;
 	TextView stopTask;
 	TextView deleteTask;
 
-	public MDialog(Context context) {
+	public MDialog(TimeController timeController, Context context) {
 		super(context);
-		requestMaker = RequestMaker.getInstance();
+		this.timeController = timeController;
 		Log.d("Dev", "MDialog instance instantiated");
 	}
 
@@ -37,7 +37,7 @@ public class MDialog extends Dialog {
 		startTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				requestMaker.startTask(task);
+				timeController.startTask(task);
 				dismiss();
 			}
 		});
@@ -45,7 +45,7 @@ public class MDialog extends Dialog {
 		stopTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				requestMaker.stopTask(task);
+				timeController.stopTask(task);
 				dismiss();
 			}
 		});
@@ -53,7 +53,7 @@ public class MDialog extends Dialog {
 		deleteTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				requestMaker.deleteTask(task);
+				timeController.deleteTask(task);
 				dismiss();
 			}
 		});

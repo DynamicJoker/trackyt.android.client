@@ -79,8 +79,9 @@ public class Task {
 	public void parseTime() {
 		time = TimeParser.convertToTime(spent);
 	}
-
+	
 	public String showTime() {
-		return (time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds());
+		return time.toString();
 	}
+	
 }

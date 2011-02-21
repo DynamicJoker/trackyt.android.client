@@ -24,4 +24,9 @@ public class Time {
 	public void setHours(int hours) {
 		this.hours = hours;
 	}
+	
+	@Override
+	public String toString() {
+		return (getHours() + ":" + getMinutes() + ":" + getSeconds());
+	}
 }

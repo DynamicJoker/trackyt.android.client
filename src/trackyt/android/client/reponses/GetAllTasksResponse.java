@@ -15,13 +15,13 @@ public class GetAllTasksResponse extends BaseResponse {
 
 class GetAllTasksData {
 	
-	List<Task> tasksList = new ArrayList<Task>();
+	List<Task> tasks = new ArrayList<Task>();
 	
 	public GetAllTasksData() {
 		
 	}
 	
 	public List<Task> getTasksList() {
-		return tasksList;
+		return tasks;
 	}
 }

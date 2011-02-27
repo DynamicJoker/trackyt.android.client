@@ -2,7 +2,7 @@ package trackyt.android.client.activities;
 
 import trackyt.android.client.R;
 import trackyt.android.client.models.Credentials;
-import trackyt.android.client.reponses.AuthResponse;
+import trackyt.android.client.reponses.AuthenticationResponse;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -18,7 +18,7 @@ public class Login extends Activity {
 
 	RequestMaker requestMaker;
 	Credentials credentials;
-	AuthResponse authResponse;
+	AuthenticationResponse authResponse;
 
 	EditText loginEditText;
 	EditText passwordEditText;

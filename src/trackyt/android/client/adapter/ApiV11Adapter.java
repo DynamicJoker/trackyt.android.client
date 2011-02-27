@@ -16,6 +16,7 @@ import trackyt.android.client.reponses.GetAllTasksResponse;
 import trackyt.android.client.reponses.StartTaskResponse;
 import trackyt.android.client.reponses.StopTaskResponse;
 import trackyt.android.client.utils.RequestMaker;
+import android.util.Log;
 
 import com.google.gson.Gson;
 
@@ -59,8 +60,9 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		} catch (HttpException e) {
 			throw new Exception("Request/Response from/to server was unsuccessful");
 		}
-		
+		Log.d("Dev", "Back to adapter");
 		GetAllTasksResponse response = new Gson().fromJson(receivedString, GetAllTasksResponse.class);
+		Log.d("Dev", "Parcing finished");
 		
 		if (!response.success) {
 			throw new Exception("Get all tasks operation was unsuccessful");
@@ -68,6 +70,7 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		
 		for (Task task : response.getTasksList()) {
 			task.parseTime();
+			Log.d("Dev", "Parsing a time in Adapter");
 		}
 		
 		return response.getTasksList();

@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpException;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
@@ -13,12 +14,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONObject;
 
-import trackyt.android.client.models.Credentials;
-import trackyt.android.client.models.Task;
-import trackyt.android.client.reponses.AuthResponse;
-import android.util.Log;
+import trackyt.android.client.models.ApiToken;
 
 public class RequestMaker {
 	
@@ -26,185 +23,107 @@ public class RequestMaker {
 	
 	private HttpManager httpManager;
 	private List<NameValuePair> params;
-	private Converter converter;
-	private AuthResponse auth;
 	private UrlComposer urlComposer;
 	
 	private RequestMaker() {
-		converter = new Converter();
 		httpManager = new HttpManager();
 		urlComposer = new UrlComposer();
-		if (MyConfig.DEBUG) Log.d("Dev", "RequestMaker created");
 	}
 
 	public static RequestMaker getInstance() {
 		return REQUEST_MAKER;
 	}
 	
-	public void initAuth(AuthResponse auth) {
-		if (auth == null) {
-			throw new NullPointerException("auth is null");
-		}
-		this.auth = auth;
-	}
-
-	public AuthResponse login(Credentials credentials) {
+	public String authenticate(String email, String password) throws HttpException {
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer.composeUrl(MyConfig.POST_AUTH_URL);
 		HttpPost httpPost = new HttpPost(uri);
 		
-		params.add(new BasicNameValuePair("email", credentials.getEmail()));
-		params.add(new BasicNameValuePair("password", credentials.getPassword()));
+		params.add(new BasicNameValuePair("email", email));
+		params.add(new BasicNameValuePair("password", password));
 		
 		try {
 			UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params,HTTP.UTF_8);
 			httpPost.setEntity(ent);
-			if (MyConfig.DEBUG) Log.d("Dev", "Entity has been set with email and password from credentials object");
-			if (MyConfig.DEBUG) Log.d("Dev", "httpPost's entity is " + httpPost.getEntity().toString());
 		} catch (UnsupportedEncodingException e) {
+			// TODO: do something about it
 			e.printStackTrace();
 		}
 	    
-		JSONObject receivedJSON = httpManager.request(httpPost);
-		return converter.toAuthResponse(receivedJSON);
+		String receivedString = httpManager.request(httpPost);
+		return receivedString;
 	}
 	
-	public ArrayList<Task> getTasks() {
-		if (auth == null) {
-			throw new NullPointerException("auth is null");
-		}
-		
-		Converter converter = new Converter();
+	public String getAllTasks(ApiToken token) throws HttpException {
 
-		URI uri = urlComposer.composeUrl(MyConfig.GET_TASKS_URL, auth.getToken());
+		URI uri = urlComposer.composeUrl(MyConfig.GET_TASKS_URL, token);
 		HttpGet httpGet = new HttpGet(uri);
 		
-		JSONObject receivedJSON = httpManager.request(httpGet);
-		return converter.jsonToTasks(receivedJSON);
+		String receivedString =  httpManager.request(httpGet);
+		return receivedString;
 	}
 	
-	public boolean addTask(Task task) {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
-		
+	public String addTask(ApiToken token, String description) throws HttpException {
 		params = new ArrayList<NameValuePair>();
-		URI uri = urlComposer.composeUrl(MyConfig.POST_ADD_TASK_URL, auth.getToken()); 
+		URI uri = urlComposer.composeUrl(MyConfig.POST_ADD_TASK_URL, token); 
 		HttpPost httpPost = new HttpPost(uri);
 		
-		params.add(new BasicNameValuePair("description", task.getDescription()));
+		params.add(new BasicNameValuePair("description", description));
 		
 		try {
 			UrlEncodedFormEntity ent = new UrlEncodedFormEntity(params,HTTP.UTF_8);
 			httpPost.setEntity(ent);
-			if (MyConfig.DEBUG) Log.d("Dev", "Entity has been set with task description");
-			if (MyConfig.DEBUG) Log.d("Dev", "httpPost's entity is " + httpPost.getEntity().toString());
 		} catch (UnsupportedEncodingException e) {
+			// TODO: do something
 			e.printStackTrace();
-			return false;
 		}
 	    
-		JSONObject receivedJSON = httpManager.request(httpPost);
-		
-		if (receivedJSON == null) {
-			return false;
-		} 
-		
-		return true;
+		String receivedString = httpManager.request(httpPost);
+		return receivedString;
 	}
 	
-	public boolean deleteTask(Task task) {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
-		
-		URI uri = urlComposer.composeUrl(MyConfig.DELETE_TASK_URL, auth.getToken()); 
-		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
+	public String deleteTask(ApiToken token, int taskId) throws HttpException {
+		URI uri = urlComposer.composeUrl(MyConfig.DELETE_TASK_URL, token); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpDelete httpDelete = new HttpDelete(urlToSend);
 		
-		JSONObject temp = httpManager.request(httpDelete);
-		
-		if (temp == null)  
-			return false; 
-		
-		return true; 
+		String receivedString = httpManager.request(httpDelete);
+		return receivedString;
 	}
 	
-	public boolean startTask(Task task) {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
-		
-		Log.d("Dev", "startTask() invoked");
-		
-		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_TASK_URL, auth.getToken()); 
-		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
-		Log.d("Dev", "Final URL to use: " + urlToSend);
+	public String startTask(ApiToken token, int taskId) throws HttpException {
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_TASK_URL, token); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpPut httpPut = new HttpPut(urlToSend);
 		
-		JSONObject temp = httpManager.request(httpPut);
-		
-		if (temp == null)  
-			return false; 
-		
-		return true; 
-		
-		// TODO: A lot of double code among methods, encapsulation to be considered.
+		String receivedString = httpManager.request(httpPut);
+		return receivedString;
 	}
 	
-	public boolean stopTask(Task task) {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
-		
-		Log.d("Dev", "stopTask() invoked");
-		
-		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_TASK_URL, auth.getToken()); 
-		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + task.getId();
-		Log.d("Dev", "Final URL to use: " + urlToSend);
+	public String stopTask(ApiToken token, int taskId) throws HttpException {
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_TASK_URL, token); 
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpPut httpPut = new HttpPut(urlToSend);
 		
-		JSONObject temp = httpManager.request(httpPut);
-		
-		if (temp == null)  
-			return false; 
-		
-		return true; 
+		String receivedString = httpManager.request(httpPut);
+		return receivedString;
 	}
     
-	public boolean startAllTasks() {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
+	public String startAllTasks(ApiToken token) throws HttpException {
 		
-		Log.d("Dev", "startAllTask() invoked");
-		
-		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_ALL_TASK_URL, auth.getToken()); 
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_ALL_TASK_URL, token); 
 		HttpPut httpPut = new HttpPut(uri);
 		
-		JSONObject temp = httpManager.request(httpPut);
-		
-		if (temp == null)  
-			return false; 
-		
-		return true;
+		String receivedString = httpManager.request(httpPut);
+		return receivedString;
 	}
 	
-	public boolean stopAllTasks() {
-		if (auth == null) {
-			throw new NullPointerException();
-		}
+	public String stopAllTasks(ApiToken token) throws HttpException {
 		
-		Log.d("Dev", "stopAllTask() invoked");
-		
-		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_ALL_TASK_URL, auth.getToken()); 
+		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_ALL_TASK_URL, token); 
 		HttpPut httpPut = new HttpPut(uri);
 		
-		JSONObject temp = httpManager.request(httpPut);
-		
-		if (temp == null)  
-			return false; 
-		
-		return true;
+		String receivedString = httpManager.request(httpPut);
+		return receivedString;
 	}
 }

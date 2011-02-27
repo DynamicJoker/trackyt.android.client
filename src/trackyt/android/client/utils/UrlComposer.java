@@ -5,10 +5,10 @@ import java.net.URISyntaxException;
 
 import org.apache.http.client.utils.URIUtils;
 
-import android.util.Log;
+import trackyt.android.client.models.ApiToken;
 
 public class UrlComposer {
-
+	
 	public URI composeUrl(String apiUri) {
 		URI uri = null;
 		try {
@@ -20,7 +20,7 @@ public class UrlComposer {
 		return null;
 	}
 
-	public URI composeUrl(String apiUri, String token) { 
+	public URI composeUrl(String apiUri, ApiToken token) { 
 	    	URI uri = null;
 	    	try {
 	    		
@@ -30,14 +30,13 @@ public class UrlComposer {
 	    		
 	    		String tmp = apiUri.toString();
 				String[] array = tmp.split("<token>");
-				tmp = array[0] + token + array[1];
+				tmp = array[0] + token.getToken() + array[1];
 				
 				uri = URIUtils.createURI(null, MyConfig.WEB_SERVER, -1, tmp, null, null);
 	    		
-				if (MyConfig.DEBUG) Log.d("Dev", "Constructed url " + uri);
 				return uri;	
 			} catch (URISyntaxException e) {
-				if (MyConfig.DEBUG) Log.d("Dev", "urlComposer was unable to construct a URL"); 
+				// TODO: do something
 				e.printStackTrace();
 			}
 	    	return null;

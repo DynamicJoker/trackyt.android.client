@@ -1,19 +1,17 @@
 package trackyt.android.client.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
 import trackyt.android.client.TrackytApiAdapter;
-import trackyt.android.client.activities.TasksBoard;
 import trackyt.android.client.activities.TasksScreen;
 import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
-import android.content.Context;
 import android.os.Handler;
-import android.widget.Toast;
 
 public class TimeController {
 
@@ -23,272 +21,68 @@ public class TimeController {
 	private ApiToken token;
 
 	public TimeController(TasksScreen tasksBoard,
-			TrackytApiAdapter mTrackytAdapter) {
+			TrackytApiAdapter mTrackytAdapter, ApiToken token) {
 
 		tasksToUpdate = new HashMap<Integer, Task>();
 		this.tasksBoard = tasksBoard;
 		this.mTrackytAdapter = mTrackytAdapter;
+		this.token = token;
+	}
+	
+	public TimeController() {
 	}
 
-	public void authenticate(final String email, final String password,
-			final Context context) {
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				try {
-					token = mTrackytAdapter.authenticate(email, password);
-					h1.post(new Runnable() {
-
-						@Override
-						public void run() {
-							Toast.makeText(context,
-									"You have been authenticated",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				} catch (NotAuthenticatedException e) {
-					h2.post(new Runnable() {
-						
-						@Override
-						public void run() {
-							Toast.makeText(context,
-									"You have not been authenticated",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-		});
-		mThread.start();
+	public ApiToken getToken() {
+		if (token == null) {
+			throw new NullPointerException("Token is null and can't be returned");
+		}
+		
+		return token;
 	}
 
-	public Task addNewTask(final String description, final Context context) {
+	public void authenticate(final String email, final String password) throws NotAuthenticatedException {
+		token = mTrackytAdapter.authenticate(email, password);
+	}
+
+	public void addNewTask(final String description) throws Exception {
 		if (description.equals("")) {
 			throw new IllegalArgumentException("description can't be empty");
 		}
 
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.addTask(task)) {
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has been created", Toast.LENGTH_SHORT)
-									.show();
-							updateUI();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been created, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-
-					});
-				}
-			}
-		});
-		mThread.start();
+		mTrackytAdapter.addTask(token, description);
 	}
 
-	public void startAll() {
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.startAllTasks()) {
-
-					addAllTaskInQueue();
-
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"All task started", Toast.LENGTH_SHORT)
-									.show();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been started, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-
-		});
-		mThread.start();
+	public void startAll() throws Exception {
+		mTrackytAdapter.startAll(token);
+		addAllTaskInQueue();
 	}
 
-	public void stopAll() {
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.stopAllTasks()) {
-
-					clearQueue();
-
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"All task stopped", Toast.LENGTH_SHORT)
-									.show();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been stopped, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-
-		});
-		mThread.start();
+	public void stopAll() throws Exception {
+		mTrackytAdapter.stopAll(token);
+		clearQueue();
 	}
 
-	public void startTask(final Task task) {
+	public void startTask(final Task task) throws Exception {
 		if (task == null) {
 			throw new IllegalArgumentException();
 		}
 
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.startTask(task)) {
-
-					addTaskInQueue(task);
-
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has been started", Toast.LENGTH_SHORT)
-									.show();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been started, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-		});
-		mThread.start();
+		mTrackytAdapter.startTask(token, task.getId());
+		addTaskInQueue(task);
 	}
 
-	public void stopTask(final Task task) {
+	public void stopTask(final Task task) throws Exception {
 		if (task == null) {
 			throw new IllegalArgumentException();
 		}
 
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.stopTask(task)) {
-
-					removeTaskFromQueue(task);
-
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has been stopped", Toast.LENGTH_SHORT)
-									.show();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been stopped, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-		});
-		mThread.start();
+		mTrackytAdapter.stopTask(token, task.getId());
+		removeTaskFromQueue(task);
 	}
 
-	public void deleteTask(final Task task) {
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				if (requestMaker.deleteTask(task)) {
-
-					removeTaskFromQueue(task);
-					// TODO: Remove task from TasksBoard.tasksList (TBI when Map
-					// is done)
-
-					h1.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has been deleted", Toast.LENGTH_SHORT)
-									.show();
-							updateUI();
-						}
-
-					});
-				} else {
-					h2.post(new Runnable() {
-
-						public void run() {
-							Toast.makeText(tasksBoard.getApplicationContext(),
-									"Task has not been deleted, try again",
-									Toast.LENGTH_SHORT).show();
-						}
-					});
-				}
-			}
-		});
-		mThread.start();
-
-	}
-
-	public void updateUI() {
-		tasksBoard.updateUI();
+	public void deleteTask(final Task task) throws Exception {
+		mTrackytAdapter.deleteTask(token, task.getId());
+		removeTaskFromQueue(task);
 	}
 
 	public void updateTime(int value) {
@@ -326,46 +120,13 @@ public class TimeController {
 		}
 	}
 
-	private void createNewThread(final Task task, final Runnable handlerObject) {
-		final Handler mHandler = new Handler();
-
-		Thread mThread = new Thread(new Runnable() {
-			public void run() {
-				requestMaker.addTask(task);
-				if (handlerObject != null) {
-					mHandler.post(handlerObject);
-				}
-			}
-		});
-		mThread.start();
+	public void updateUI() {
+		tasksBoard.updateUI();
 	}
-
-	public void loadTasks() {
-		final Handler h1 = new Handler();
-		final Handler h2 = new Handler();
-
-		Thread t = new Thread(new Runnable() {
-
-			public void run() {
-				h1.post(new Runnable() {
-					public void run() {
-						tasksBoard.showLoadTaskDialog();
-					}
-				});
-
-				tasksBoard.initTaskList(requestMaker.getTasks());
-
-				h2.post(new Runnable() {
-
-					public void run() {
-						tasksBoard.dismissLoadTaskDialog();
-					}
-
-				});
-			}
-
-		});
-		t.start();
+	
+	public ArrayList<Task> loadTasks() throws Exception {
+		ArrayList<Task> tmp = new ArrayList<Task>(mTrackytAdapter.getAllTasks(token));
+		return tmp;
 	}
 
 	public void runCount() {
@@ -375,10 +136,10 @@ public class TimeController {
 				while (true) {
 					try {
 						Thread.sleep(1000);
+						updateTime(1);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					updateTime(1);
 					mHandler.post(new Runnable() {
 
 						public void run() {

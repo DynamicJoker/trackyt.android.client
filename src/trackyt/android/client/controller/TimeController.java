@@ -7,6 +7,7 @@ import java.util.Map;
 
 import trackyt.android.client.TrackytApiAdapter;
 import trackyt.android.client.activities.TasksBoard;
+import trackyt.android.client.activities.TasksScreen;
 import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
@@ -16,12 +17,12 @@ import android.widget.Toast;
 
 public class TimeController {
 
-	private TasksBoard tasksBoard; // TODO: change to abstract class
+	private TasksScreen tasksBoard; 
 	private Map<Integer, Task> tasksToUpdate;
 	private TrackytApiAdapter mTrackytAdapter;
 	private ApiToken token;
 
-	public TimeController(TasksBoard tasksBoard,
+	public TimeController(TasksScreen tasksBoard,
 			TrackytApiAdapter mTrackytAdapter) {
 
 		tasksToUpdate = new HashMap<Integer, Task>();
@@ -65,9 +66,9 @@ public class TimeController {
 		mThread.start();
 	}
 
-	public void addNewTask(final Task task) {
-		if (task == null) {
-			throw new IllegalArgumentException();
+	public Task addNewTask(final String description, final Context context) {
+		if (description.equals("")) {
+			throw new IllegalArgumentException("description can't be empty");
 		}
 
 		final Handler h1 = new Handler();

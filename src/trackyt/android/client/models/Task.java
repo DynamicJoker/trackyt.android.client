@@ -3,14 +3,14 @@ package trackyt.android.client.models;
 import trackyt.android.client.utils.TimeParser;
 
 public class Task {
-	private Time time; 
 	private int id;
 	private String description;
 	private int status;
-	private int createdDate;
-	private int startedDate;
-	private int stoppedDate;
+	private String createdDate;
+	private String startedDate;
+	private String stoppedDate;
 	private int spent;
+	private Time time; 
 
 	public Task() {
 	}
@@ -36,7 +36,7 @@ public class Task {
 		this.description = description;
 	}
 
-	public int getCreatedDate() {
+	public String getCreatedDate() {
 		return createdDate;
 	}
 
@@ -48,23 +48,23 @@ public class Task {
 		this.status = status;
 	}
 
-	public void setCreatedDate(int createdDate) {
+	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
 
-	public int getStartedDate() {
+	public String getStartedDate() {
 		return startedDate;
 	}
 
-	public void setStartedDate(int startedDate) {
+	public void setStartedDate(String startedDate) {
 		this.startedDate = startedDate;
 	}
 
-	public int getStoppedDate() {
+	public String getStoppedDate() {
 		return stoppedDate;
 	}
 
-	public void setStoppedDate(int stoppedDate) {
+	public void setStoppedDate(String stoppedDate) {
 		this.stoppedDate = stoppedDate;
 	}
 

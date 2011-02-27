@@ -1,7 +1,10 @@
 package trackyt.android.client.activities;
 
 import trackyt.android.client.R;
-import trackyt.android.client.models.Credentials;
+import trackyt.android.client.TrackytApiAdapter;
+import trackyt.android.client.TrackytApiAdapterFactory;
+import trackyt.android.client.exceptions.NotAuthenticatedException;
+import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.reponses.AuthenticationResponse;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
@@ -17,7 +20,6 @@ import android.widget.Toast;
 public class Login extends Activity {
 
 	RequestMaker requestMaker;
-	Credentials credentials;
 	AuthenticationResponse authResponse;
 
 	EditText loginEditText;
@@ -27,19 +29,21 @@ public class Login extends Activity {
 	
 	ProgressDialog progressDialog;
 	Handler mHandler;
-
+	
+	TrackytApiAdapter mAdapter;
+	ApiToken token;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
 		requestMaker = RequestMaker.getInstance();
-		credentials = new Credentials();
 		loginEditText = (EditText) findViewById(R.id.login_edit_text);
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);
 		loginButton = (Button) findViewById(R.id.login_button);
 		createAccountButton = (Button) findViewById(R.id.create_account_button);
-		mHandler = new Handler();
+		mAdapter = new TrackytApiAdapterFactory().createV11Adapter();
 
 		loginEditText.setText("ebeletskiy@gmail.com");
 		passwordEditText.setText("mikusya");
@@ -57,47 +61,27 @@ public class Login extends Activity {
 		// TODO: implement createAccountOnClick()
 	}
 
-	private boolean doLogin() {
-		if (!updateCredentials()) {
-			return false;
+	private void doLogin() {
+		try {
+			token = mAdapter.authenticate("ebeletskiy@gmail.com", "mikusya");
+		} catch (NotAuthenticatedException e) {
+			// TODO: Show toast here
 		}
-
-		authResponse = requestMaker.login(credentials);
-		if (authResponse == null)
-			return false;
-		return authResponse.getLogin();
-	}
-
-	private boolean updateCredentials() {
-		if (loginEditText.getText().toString().equals("")
-				&& passwordEditText.getText().toString().equals("")) {
-			return false;
-		}
-
-		credentials.setEmail(loginEditText.getText().toString());
-		credentials.setPassword(passwordEditText.getText().toString());
-
-		return true;
 	}
 
 	private void openTasksBoardActivity() {
 		progressDialog.dismiss();
 		Intent intent = new Intent(Login.this, TasksBoard.class);
-		intent.putExtra("auth", authResponse);
+		intent.putExtra("token", token.getToken());
 		Login.this.startActivity(intent);
 	}
 	
 	class LoginJob implements Runnable {
 
 		public void run() {
-			if (doLogin()) {
-				openTasksBoardActivity();
-			} else {
-				mHandler.post(new Runnable() {
-					public void run() { updateGUI(); }
-				});
+			doLogin();
+			openTasksBoardActivity();
 			}
-		}
 	}
 	
 	private void updateGUI() {

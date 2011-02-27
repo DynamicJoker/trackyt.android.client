@@ -40,7 +40,12 @@ public class MDialog extends Dialog {
 		startTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				timeController.startTask(task);
+				try {
+					timeController.startTask(task);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				dismiss();
 			}
 		});
@@ -48,7 +53,12 @@ public class MDialog extends Dialog {
 		stopTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				timeController.stopTask(task);
+				try {
+					timeController.stopTask(task);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				dismiss();
 			}
 		});
@@ -56,7 +66,12 @@ public class MDialog extends Dialog {
 		deleteTask.setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
-				timeController.deleteTask(task);
+				try {
+					timeController.deleteTask(task);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				dismiss();
 			}
 		});

@@ -6,14 +6,13 @@ import java.util.List;
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.reponses.AuthResponse;
+import trackyt.android.client.reponses.AuthenticationResponse;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,7 +29,7 @@ import android.widget.TextView;
 
 public class TasksBoard extends Activity {
 	ArrayList<Task> taskList; // TODO: change to Map
-	AuthResponse auth;
+	AuthenticationResponse auth;
 	RequestMaker requestMaker;
 	
 	MyAdapter mAdapter;
@@ -52,10 +51,9 @@ public class TasksBoard extends Activity {
 		// TODO: No need to pass data as extras, pass auth obj to
 		// requestMaker just after authentication
 		Bundle extras = getIntent().getExtras(); 
-		auth = (AuthResponse) extras.getSerializable("auth");
+		auth = (AuthenticationResponse) extras.getSerializable("auth");
 		
 		requestMaker = RequestMaker.getInstance();
-		requestMaker.initAuth(auth);
 		// ---------------------------------------------------
 		timeController = new TimeController(this);
 		itemPressDialog = new MDialog(timeController, this);

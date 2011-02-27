@@ -3,7 +3,6 @@ package trackyt.android.client.activities;
 import java.util.ArrayList;
 import java.util.List;
 
-import trackyt.android.client.MDialog;
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.AuthResponse;

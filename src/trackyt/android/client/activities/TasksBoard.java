@@ -5,8 +5,8 @@ import java.util.List;
 
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
-import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.reponses.AuthResponse;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;

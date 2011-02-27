@@ -15,9 +15,9 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 
-import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Credentials;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.reponses.AuthResponse;
 import android.util.Log;
 
 public class RequestMaker {

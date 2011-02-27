@@ -6,8 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import trackyt.android.client.models.AuthResponse;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.reponses.AuthResponse;
 import android.util.Log;
 
 public class Converter {

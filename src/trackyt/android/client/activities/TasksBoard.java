@@ -27,7 +27,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class TasksBoard extends Activity {
+public class TasksBoard extends Activity implements TasksScreen {
 	ArrayList<Task> taskList; // TODO: change to Map
 	AuthenticationResponse auth;
 	RequestMaker requestMaker;
@@ -92,7 +92,7 @@ public class TasksBoard extends Activity {
 	}
 
 
-
+	@Override
 	public void updateUI() {
 		mAdapter.notifyDataSetChanged();
 	}
@@ -110,14 +110,14 @@ public class TasksBoard extends Activity {
 		editText.setText("");
 	}
 	
-
+	@Override
 	public void showLoadTaskDialog() {
 		pDialogGetTasks = pDialogGetTasks.show(this, "Getting tasks", 
 				"Loading your tasks, please wait", true, false);
 	}
 
 
-
+	@Override
 	public void dismissLoadTaskDialog() {
 		if (pDialogGetTasks != null) 
 		pDialogGetTasks.dismiss();

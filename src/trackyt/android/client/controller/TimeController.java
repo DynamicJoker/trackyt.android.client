@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import trackyt.android.client.TrackytApiAdapter;
@@ -124,9 +125,9 @@ public class TimeController {
 		tasksBoard.updateUI();
 	}
 	
-	public ArrayList<Task> loadTasks() throws Exception {
-		ArrayList<Task> tmp = new ArrayList<Task>(mTrackytAdapter.getAllTasks(token));
-		return tmp;
+	public List<Task> loadTasks() throws Exception {
+//		ArrayList<Task> tmp = new ArrayList<Task>(mTrackytAdapter.getAllTasks(token));
+		return mTrackytAdapter.getAllTasks(token);
 	}
 
 	public void runCount() {

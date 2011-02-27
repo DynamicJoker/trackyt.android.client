@@ -30,7 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity implements TasksScreen {
-	ArrayList<Task> taskList; // TODO: change to Map
+	List<Task> taskList; // TODO: change to Map
 	RequestMaker requestMaker;
 
 	MyAdapter mAdapter;
@@ -192,7 +192,8 @@ public class TasksBoard extends Activity implements TasksScreen {
 	private class MyAdapter extends ArrayAdapter<Task> {
 		private LayoutInflater mInflater;
 
-		public MyAdapter(Context context, int resource, ArrayList<Task> list) {
+//		public MyAdapter(Context context, int resource, ArrayList<Task> list) {
+		public MyAdapter(Context context, int resource, List<Task> list) {
 			super(context, resource, list);
 			/* Getting inflater from the received context */
 			mInflater = LayoutInflater.from(context);

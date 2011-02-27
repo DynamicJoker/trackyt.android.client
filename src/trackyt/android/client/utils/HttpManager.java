@@ -13,6 +13,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 public class HttpManager {
 	
 	private HttpClient httpClient;
@@ -27,13 +29,16 @@ public class HttpManager {
 		httpClient = new DefaultHttpClient();
 		try {
 			httpResponse = httpClient.execute(requestType); 
-	
+			Log.d("Dev", "httpClient.execute() executed");
+			
 			if (httpResponse != null && httpResponse.getStatusLine().getStatusCode() == 200) {
+				Log.d("Dev", "Response is OK");
 				httpEntity = httpResponse.getEntity();
 			
 				if (httpEntity != null) {
 					InputStream instream = httpEntity.getContent(); 
 					String receivedString = convertStreamToString(instream);
+					Log.d("Dev", "Received string: " + receivedString);
 					return receivedString;
 				} else throw new HttpException("httpEntity is null");
 			} else throw new HttpException("httpReponse is null OR Status Code != 200");

@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
 import trackyt.android.client.models.ApiToken;
+import android.util.Log;
 
 public class RequestMaker {
 	
@@ -60,6 +61,7 @@ public class RequestMaker {
 		HttpGet httpGet = new HttpGet(uri);
 		
 		String receivedString =  httpManager.request(httpGet);
+		Log.d("Dev", "Received string from RequestMaker: " + receivedString);
 		return receivedString;
 	}
 	

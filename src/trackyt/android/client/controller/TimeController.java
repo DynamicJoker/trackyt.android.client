@@ -1,6 +1,5 @@
 package trackyt.android.client.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -83,6 +82,8 @@ public class TimeController {
 
 	public void deleteTask(final Task task) throws Exception {
 		mTrackytAdapter.deleteTask(token, task.getId());
+		// Delete item from tasksList
+		// Test comment
 		removeTaskFromQueue(task);
 	}
 

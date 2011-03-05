@@ -63,7 +63,7 @@ public class Login extends Activity {
 
 	private void doLogin() {
 		try {
-			token = mAdapter.authenticate("ebeletskiy@gmail.com", "mikusya");
+			token = mAdapter.authenticate(loginEditText.getText().toString(), passwordEditText.getText().toString()); 
 		} catch (NotAuthenticatedException e) {
 			// TODO: Show toast here
 		}

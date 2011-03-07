@@ -70,7 +70,7 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		
 		for (Task task : response.getTasksList()) {
 			task.parseTime();
-			Log.d("Dev", "Parsing a time in Adapter");
+//			Log.d("Dev", "Parsing a time in Adapter");
 		}
 		
 		return response.getTasksList();

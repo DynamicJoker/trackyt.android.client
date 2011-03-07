@@ -9,50 +9,46 @@ import trackyt.android.client.reponses.AuthenticationResponse;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Login extends Activity {
 
-	RequestMaker requestMaker;
-	AuthenticationResponse authResponse;
-
-	EditText loginEditText;
-	EditText passwordEditText;
-	Button loginButton;
-	Button createAccountButton;
+	private EditText loginEditText;
+	private EditText passwordEditText;
+	private Button loginButton;
+	private Button createAccountButton;
 	
-	ProgressDialog progressDialog;
-	Handler mHandler;
-	
-	TrackytApiAdapter mAdapter;
-	ApiToken token;
+	private TrackytApiAdapter mAdapter;
+	private ApiToken token;
+	private ProgressDialog progressDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 
-		requestMaker = RequestMaker.getInstance();
 		loginEditText = (EditText) findViewById(R.id.login_edit_text);
 		passwordEditText = (EditText) findViewById(R.id.password_edit_text);
 		loginButton = (Button) findViewById(R.id.login_button);
 		createAccountButton = (Button) findViewById(R.id.create_account_button);
-		mAdapter = new TrackytApiAdapterFactory().createV11Adapter();
+		mAdapter = TrackytApiAdapterFactory.createV11Adapter();
 
 		loginEditText.setText("ebeletskiy@gmail.com");
 		passwordEditText.setText("mikusya");
+		
 	}
 
 	public void loginOnClick(View view) {
-		Thread mThread = new Thread(new LoginJob());
-		progressDialog = ProgressDialog.show(this, "Loging in...", "Please wait a bit", true, false);
-		mThread.start();
+		new LoginMe().execute(this);
     }
 
 	public void createAccountOnClick(View view) {
@@ -61,31 +57,48 @@ public class Login extends Activity {
 		// TODO: implement createAccountOnClick()
 	}
 
-	private void doLogin() {
-		try {
-			token = mAdapter.authenticate(loginEditText.getText().toString(), passwordEditText.getText().toString()); 
-		} catch (NotAuthenticatedException e) {
-			// TODO: Show toast here
-		}
-	}
-
 	private void openTasksBoardActivity() {
-		progressDialog.dismiss();
 		Intent intent = new Intent(Login.this, TasksBoard.class);
 		intent.putExtra("token", token.getToken());
 		Login.this.startActivity(intent);
 	}
 	
-	class LoginJob implements Runnable {
-
-		public void run() {
-			doLogin();
-			openTasksBoardActivity();
-			}
+	private void updateGUI() {
+		Toast.makeText(this, "Login wasn't successful, try again", Toast.LENGTH_SHORT).show();
 	}
 	
-	private void updateGUI() {
-		Toast.makeText(this, "Login wasn't successful", Toast.LENGTH_SHORT).show();
-		progressDialog.dismiss();
+	private class LoginMe extends AsyncTask<Context, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Context... arg0) {
+			try {
+				publishProgress();
+				token = mAdapter.authenticate(loginEditText.getText().toString(), passwordEditText.getText().toString()); 
+			} catch (NotAuthenticatedException e) {
+				return false;
+			} finally {
+				if (progressDialog != null) {
+					progressDialog.dismiss();
+				}
+			}
+			return true;
+		}
+		
+		@Override
+		protected void onProgressUpdate(Void... v) {
+			super.onProgressUpdate(v);
+			progressDialog = ProgressDialog.show(Login.this, "Loging in", "Please wait...");
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				openTasksBoardActivity();
+			} else {
+				updateGUI();
+			}
+		}
 	}
+
 }

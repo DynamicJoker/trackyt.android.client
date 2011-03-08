@@ -48,7 +48,7 @@ public class Login extends Activity {
 	}
 
 	public void loginOnClick(View view) {
-		new LoginMe().execute(this);
+		new LoginMe().execute();
     }
 
 	public void createAccountOnClick(View view) {
@@ -67,10 +67,10 @@ public class Login extends Activity {
 		Toast.makeText(this, "Login wasn't successful, try again", Toast.LENGTH_SHORT).show();
 	}
 	
-	private class LoginMe extends AsyncTask<Context, Void, Boolean> {
+	private class LoginMe extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
-		protected Boolean doInBackground(Context... arg0) {
+		protected Boolean doInBackground(Void... v) {
 			try {
 				publishProgress();
 				token = mAdapter.authenticate(loginEditText.getText().toString(), passwordEditText.getText().toString()); 

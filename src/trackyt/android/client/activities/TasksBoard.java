@@ -14,7 +14,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -33,7 +32,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 	List<Task> taskList; // TODO: change to Map
 	RequestMaker requestMaker;
 
-	MAdapter mAdapter;
+	MyAdapter mAdapter;
 
 	ListView listView;
 	Button okButton;
@@ -74,7 +73,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 	@Override
 	public void updateUI() {
-		Log.d("Dev", "mAdapter.notifyDataSetChanged();");
 		mAdapter.notifyDataSetChanged();
 	}
 
@@ -143,10 +141,12 @@ public class TasksBoard extends Activity implements TasksScreen {
 		}
 	}
 
-	private class MAdapter extends BaseAdapter {
+	private class MyAdapter extends ArrayAdapter<Task> {
 		private LayoutInflater mInflater;
 
-		public MAdapter(Context context) {
+		public MyAdapter(Context context, int resource, List<Task> list) {
+			super(context, resource, list);
+			/* Getting inflater from the received context */
 			mInflater = LayoutInflater.from(context);
 		}
 
@@ -179,26 +179,10 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 			return v;
 		}
-
-		@Override
-		public int getCount() {
-			return taskList.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return taskList.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return taskList.get(1).getId(); // TODO: temporary solution
-		}
 	}
-	
+
 	private void setupListView() {
-		Log.d("Dev", "setupListView()");
-		mAdapter = new MAdapter(this);
+		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
 		listView.setAdapter(mAdapter);
 		listView.setCacheColorHint(Color.WHITE);
 	}

@@ -25,11 +25,17 @@
  		<requestFocus />
  	</Button> 	
   	
+  	<!--  Created to remove focus from EditText -->
+  	<LinearLayout android:focusable="true"
+    	android:focusableInTouchMode="true"
+    	android:layout_width="0px"
+        android:layout_height="0px" />
+  	
  	<EditText
  		android:id="@+id/edit_text"
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
- 		android:hint="Task description"
+ 		android:hint="New task's description"
  		android:layout_toLeftOf="@id/ok_button">
  	</EditText>
   	

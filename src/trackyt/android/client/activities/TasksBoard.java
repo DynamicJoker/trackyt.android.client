@@ -95,16 +95,9 @@ public class TasksBoard extends Activity implements TasksScreen {
 	}
 
 	@Override
-	public void showLoadTaskDialog() {
-		pDialogGetTasks = pDialogGetTasks.show(this, "Getting tasks",
-				"Loading your tasks, please wait", true, false);
-	}
-
-	@Override
 	public void dismissLoadTaskDialog() {
 		if (pDialogGetTasks != null)
 			pDialogGetTasks.dismiss();
-
 	}
 
 	@Override

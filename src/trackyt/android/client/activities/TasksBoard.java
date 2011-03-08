@@ -95,12 +95,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 	}
 
 	@Override
-	public void dismissLoadTaskDialog() {
-		if (pDialogGetTasks != null)
-			pDialogGetTasks.dismiss();
-	}
-
-	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		MenuInflater inflater = getMenuInflater();

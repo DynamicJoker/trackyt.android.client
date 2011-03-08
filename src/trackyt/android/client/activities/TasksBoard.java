@@ -1,6 +1,5 @@
 package trackyt.android.client.activities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import trackyt.android.client.R;
@@ -13,8 +12,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +42,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 	ProgressDialog pDialogGetTasks;
 
 	TimeController timeController;
+	ProgressDialog progressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,48 +57,13 @@ public class TasksBoard extends Activity implements TasksScreen {
 		itemPressDialog = new MDialog(timeController, this);
 
 		initializeControls();
-		try {
-			taskList = timeController.loadTasks();
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(),
-					"Something wrong happened, try again",
-					Toast.LENGTH_SHORT);
-			e.printStackTrace();
-		}
 		
-		Log.d("Dev", "Task list: " + taskList.toString());
-		Log.d("Dev", "Tasks are in TasksBoard activity");
-		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Log.d("Dev", "about to setup List View");
-		
-		setupListView();
-		updateUI();
-		timeController.runCount();
-
-		listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int position, long arg3) {
-				Task task = (Task) listView.getItemAtPosition(position);
-				itemPressDialog.setTask(task);
-				itemPressDialog.show();
-				return false;
-			}
-		});
+		new TasksLoader().execute();
 	}
-
-	public void initTaskList(List<Task> list) {
-		Log.d("Dev", "Task list initialized");
-		this.taskList = (ArrayList<Task>) list;
-		for (Task t : taskList) {
-			t.parseTime(); // TODO: Remove this somewhere
-		}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
 	}
 
 	@Override
@@ -192,7 +157,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 	private class MyAdapter extends ArrayAdapter<Task> {
 		private LayoutInflater mInflater;
 
-//		public MyAdapter(Context context, int resource, ArrayList<Task> list) {
 		public MyAdapter(Context context, int resource, List<Task> list) {
 			super(context, resource, list);
 			/* Getting inflater from the received context */
@@ -241,5 +205,56 @@ public class TasksBoard extends Activity implements TasksScreen {
 		editText = (EditText) findViewById(R.id.edit_text);
 		listView = (ListView) findViewById(R.id.list_view);
 	}
+	
+	private class TasksLoader extends AsyncTask<Void, Void, Boolean> {
 
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			try {
+				publishProgress();
+				taskList = timeController.loadTasks();
+				return true;
+			} catch (Exception e) {
+				Toast.makeText(getApplicationContext(),
+						"Something wrong happened, try again",
+						Toast.LENGTH_SHORT);
+				e.printStackTrace();
+				return false;
+			} finally {
+				if (progressDialog != null) {
+					progressDialog.dismiss();
+				}
+			}
+			
+		}
+		
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			progressDialog = ProgressDialog.show(TasksBoard.this, "Loading tasks", "Please wait...");
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			
+			setupListView();
+			updateUI();
+			timeController.runCount();
+
+			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+					Task task = (Task) listView.getItemAtPosition(position);
+					itemPressDialog.setTask(task);
+					itemPressDialog.show();
+					return false;
+				}
+			});
+			
+			progressDialog = null;
+		}
+	}
 }

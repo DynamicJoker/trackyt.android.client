@@ -92,24 +92,10 @@ public class TasksBoard extends Activity implements TasksScreen {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.start_all:
-			try {
-				timeController.startAll();
-			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(),
-						"Something wrong happened, try again",
-						Toast.LENGTH_SHORT);
-				e.printStackTrace();
-			}
+			new StartAll().execute();
 			return true;
 		case R.id.stop_all:
-			try {
-				timeController.stopAll();
-			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(),
-						"Something wrong happened, try again",
-						Toast.LENGTH_SHORT);
-				e.printStackTrace();
-			}
+			new StopAll().execute();
 			return true;
 		case R.id.menu_refresh:
 			new TasksLoader().execute();
@@ -267,6 +253,77 @@ public class TasksBoard extends Activity implements TasksScreen {
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Task hasn't been created, try again",
+						Toast.LENGTH_SHORT);
+			}
+		}
+
+	}
+	
+	private class StartAll extends AsyncTask<Void, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			publishProgress();
+			try {
+				timeController.startAll();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			Toast.makeText(getApplicationContext(), "Starting all tasks...",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				Toast.makeText(getApplicationContext(), "Tasks started",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Task hasn't been started, try again",
+						Toast.LENGTH_SHORT);
+			}
+		}
+	}
+	
+	private class StopAll extends AsyncTask<Void, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			publishProgress();
+			try {
+				timeController.stopAll();
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			Toast.makeText(getApplicationContext(), "Stoping all tasks...",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				Toast.makeText(getApplicationContext(), "Tasks stopped",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Task hasn't been stopped, try again",
 						Toast.LENGTH_SHORT);
 			}
 		}

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -63,17 +64,13 @@ public class TasksBoard extends Activity implements TasksScreen {
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-	}
-
-	@Override
 	public List<Task> getTaskList() {
 		return taskList;
 	}
 
 	@Override
 	public void updateUI() {
+		Log.d("Dev", "updateUI() invoked");
 		mAdapter.notifyDataSetChanged();
 	}
 
@@ -122,6 +119,18 @@ public class TasksBoard extends Activity implements TasksScreen {
 		}
 	}
 
+	private void setupListView() {
+		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
+		listView.setAdapter(mAdapter);
+		listView.setCacheColorHint(Color.WHITE);
+	}
+
+	private void initializeControls() {
+		okButton = (Button) findViewById(R.id.ok_button);
+		editText = (EditText) findViewById(R.id.edit_text);
+		listView = (ListView) findViewById(R.id.list_view);
+	}
+
 	private class MyAdapter extends ArrayAdapter<Task> {
 		private LayoutInflater mInflater;
 
@@ -160,18 +169,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 			return v;
 		}
-	}
-
-	private void setupListView() {
-		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
-		listView.setAdapter(mAdapter);
-		listView.setCacheColorHint(Color.WHITE);
-	}
-
-	private void initializeControls() {
-		okButton = (Button) findViewById(R.id.ok_button);
-		editText = (EditText) findViewById(R.id.edit_text);
-		listView = (ListView) findViewById(R.id.list_view);
 	}
 
 	private class TasksLoader extends AsyncTask<Void, Void, Boolean> {
@@ -223,6 +220,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 					Task task = (Task) listView.getItemAtPosition(position);
 					itemPressDialog.setTask(task);
 					itemPressDialog.show();
+					updateUI();
 					return false;
 				}
 			});

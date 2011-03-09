@@ -12,6 +12,7 @@ import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
 import android.os.Handler;
+import android.util.Log;
 
 public class TimeController {
 
@@ -83,7 +84,6 @@ public class TimeController {
 	public void deleteTask(final Task task) throws Exception {
 		mTrackytAdapter.deleteTask(token, task.getId());
 		tasksBoard.getTaskList().remove(task);
-		tasksBoard.updateUI();
 		removeTaskFromQueue(task);
 	}
 

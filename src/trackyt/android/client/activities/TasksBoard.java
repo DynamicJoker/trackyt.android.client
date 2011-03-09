@@ -53,14 +53,15 @@ public class TasksBoard extends Activity implements TasksScreen {
 		String token = (String) extras.get("token");
 
 		timeController = new TimeController(this,
-				TrackytApiAdapterFactory.createV11Adapter(), new ApiToken(token));
+				TrackytApiAdapterFactory.createV11Adapter(),
+				new ApiToken(token));
 		itemPressDialog = new MDialog(timeController, this);
 
 		initializeControls();
-		
+
 		new TasksLoader().execute();
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -78,20 +79,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 	public void onClickOKButton(View view) {
 
-		String taskDescription = editText.getText().toString();
-		final Task task = new Task(taskDescription);
-		task.parseTime();
-		taskList.add(task);
-		try {
-			timeController.addNewTask(task.getDescription());
-			timeController.loadTasks();
-		} catch (Exception e) {
-			Toast.makeText(getApplicationContext(),
-					"Something wrong happened, try again",
-					Toast.LENGTH_SHORT);
-			e.printStackTrace();
-		}
-		editText.setText("");
+		new AddNewTask().execute();
 	}
 
 	@Override
@@ -127,14 +115,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 			}
 			return true;
 		case R.id.menu_refresh:
-			try {
-				timeController.loadTasks();
-			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(),
-						"Something wrong happened, try again",
-						Toast.LENGTH_SHORT);
-				e.printStackTrace();
-			}
+			new TasksLoader().execute();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -192,7 +173,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 		editText = (EditText) findViewById(R.id.edit_text);
 		listView = (ListView) findViewById(R.id.list_view);
 	}
-	
+
 	private class TasksLoader extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
@@ -203,9 +184,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 				taskList = timeController.loadTasks();
 				return true;
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(),
-						"Something wrong happened, try again",
-						Toast.LENGTH_SHORT);
 				e.printStackTrace();
 				return false;
 			} finally {
@@ -213,19 +191,27 @@ public class TasksBoard extends Activity implements TasksScreen {
 					progressDialog.dismiss();
 				}
 			}
-			
+
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(Void... values) {
 			super.onProgressUpdate(values);
-			progressDialog = ProgressDialog.show(TasksBoard.this, "Loading tasks", "Please wait...");
+			progressDialog = ProgressDialog.show(TasksBoard.this,
+					"", "Loading tasks. Please wait...");
 		}
-		
+
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			
+			if (!result) {
+				Toast.makeText(getApplicationContext(),
+						"Something wrong happened, try again",
+						Toast.LENGTH_SHORT).show(); 
+				return;
+			}
+
 			setupListView();
 			updateUI();
 			timeController.runCount();
@@ -240,8 +226,52 @@ public class TasksBoard extends Activity implements TasksScreen {
 					return false;
 				}
 			});
-			
+
 			progressDialog = null;
 		}
+	}
+
+	private class AddNewTask extends AsyncTask<Void, Void, Boolean> {
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			String taskDescription = editText.getText().toString();
+			final Task task = new Task(taskDescription);
+			task.parseTime(); // TODO: ?
+			taskList.add(task);
+			publishProgress();
+			try {
+				timeController.addNewTask(task.getDescription());
+				timeController.loadTasks();
+				editText.setText("");
+				return true;
+			} catch (Exception e) {
+				taskList.remove(task);
+				e.printStackTrace();
+				return false;
+			}
+		}
+
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			Toast.makeText(getApplicationContext(), "Adding new task...",
+					Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				updateUI();
+				Toast.makeText(getApplicationContext(), "Task created",
+						Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(getApplicationContext(),
+						"Task hasn't been created, try again",
+						Toast.LENGTH_SHORT);
+			}
+		}
+
 	}
 }

@@ -63,10 +63,6 @@ public class Login extends Activity {
 		Login.this.startActivity(intent);
 	}
 	
-	private void updateGUI() {
-		Toast.makeText(this, "Login wasn't successful, try again", Toast.LENGTH_SHORT).show();
-	}
-	
 	private class LoginMe extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
@@ -87,7 +83,7 @@ public class Login extends Activity {
 		@Override
 		protected void onProgressUpdate(Void... v) {
 			super.onProgressUpdate(v);
-			progressDialog = ProgressDialog.show(Login.this, "Loging in", "Please wait...");
+			progressDialog = ProgressDialog.show(Login.this, "", "Loging in. Please wait...");
 		}
 		
 		@Override
@@ -96,7 +92,7 @@ public class Login extends Activity {
 			if (result) {
 				openTasksBoardActivity();
 			} else {
-				updateGUI();
+				Toast.makeText(getApplicationContext(), "Login wasn't successful, try again", Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

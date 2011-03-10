@@ -9,10 +9,8 @@ import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,9 +44,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 	ProgressDialog progressDialog;
 	
 	ADialog alert;
-	
-//	AlertDialog.Builder builder;
-//	AlertDialog alert;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,22 +54,13 @@ public class TasksBoard extends Activity implements TasksScreen {
 		String token = (String) extras.get("token");
 
 		timeController = new TimeController(this,
-				TrackytApiAdapterFactory.createV11Adapter(),
-				new ApiToken(token));
+		TrackytApiAdapterFactory.createV11Adapter(), new ApiToken(token));
 		itemPressDialog = new MDialog(timeController, this);
 
 		initializeControls();
 
 		new TasksLoader().execute();
-		alert = new ADialog(this);
-		
-//		builder = new AlertDialog.Builder(this);
-//		builder.setTitle("Task");
-//		builder.setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
-//		    public void onClick(DialogInterface dialog, int item) {
-//		    }
-//		});
-//		alert = builder.create();
+		alert = new ADialog(this, timeController);
 	}
 
 	@Override
@@ -227,10 +213,8 @@ public class TasksBoard extends Activity implements TasksScreen {
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
-//					Task task = (Task) listView.getItemAtPosition(position);
-//					itemPressDialog.setTask(task);
-//					itemPressDialog.show();
-//					updateUI();
+					Task task = (Task) listView.getItemAtPosition(position);
+					alert.setTask(task);
 					alert.show();
 				}
 			});
@@ -246,11 +230,9 @@ public class TasksBoard extends Activity implements TasksScreen {
 			String taskDescription = editText.getText().toString();
 			Task task = new Task(taskDescription);
 			task.parseTime();
-//			taskList.add(task);
 			publishProgress();
 			try {
 				timeController.addNewTask(task.getDescription());
-//				taskList = timeController.loadTasks();
 				return true;
 			} catch (Exception e) {
 				taskList.remove(task);

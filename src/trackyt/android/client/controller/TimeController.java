@@ -46,11 +46,13 @@ public class TimeController {
 	}
 
 	public void addNewTask(final String description) throws Exception {
+		Log.d("Dev", "TimeController addNewTask()");
 		if (description.equals("")) {
 			throw new IllegalArgumentException("description can't be empty");
 		}
 
 		mTrackytAdapter.addTask(token, description);
+		Log.d("Dev", "TimeController addNewTask() finished");
 	}
 
 	public void startAll() throws Exception {
@@ -127,7 +129,7 @@ public class TimeController {
 	}
 	
 	public List<Task> loadTasks() throws Exception {
-//		ArrayList<Task> tmp = new ArrayList<Task>(mTrackytAdapter.getAllTasks(token));
+		Log.d("Dev", "TimeController loadTasks()");
 		return mTrackytAdapter.getAllTasks(token);
 	}
 

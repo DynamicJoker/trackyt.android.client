@@ -4,8 +4,8 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent"
   android:orientation="vertical"
-  android:background="#ffffff">
-  
+  >
+  <!-- android:background="#ffffff"  -->
   <TextView
   	android:id="@+id/start_task"
   	android:layout_width="fill_parent"
@@ -13,7 +13,12 @@
   	android:text="Start Task"
   	android:textSize="34dp"
   	android:textColor="#096101"
-  	android:gravity="center_horizontal">
+  	android:gravity="center_horizontal"
+  	android:textColorHighlight="#ffffff"
+  	android:focusable="true"
+  	android:focusableInTouchMode="true"
+  	android:clickable="true"
+  	android:selectAllOnFocus="true">
   </TextView>
   
   <View

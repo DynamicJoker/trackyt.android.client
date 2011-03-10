@@ -1,16 +1,14 @@
 package trackyt.android.client.activities;
 
 import trackyt.android.client.R;
-import trackyt.android.client.R.id;
-import trackyt.android.client.R.layout;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.reponses.GetAllTasksResponse;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Spannable;
+import android.text.style.BackgroundColorSpan;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +48,7 @@ public class MDialog extends Dialog {
 		
 		stopTask.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
+				v.setFocusable(true);
 				new StopTask().execute();
 			}
 		});

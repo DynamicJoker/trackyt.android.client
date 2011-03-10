@@ -49,7 +49,7 @@
 	android:divider="#206600"
 	android:dividerHeight="2dp"
 	android:smoothScrollbar="true"
-	android:background="#ffffff">
+	>
 </ListView>
   
 </LinearLayout>

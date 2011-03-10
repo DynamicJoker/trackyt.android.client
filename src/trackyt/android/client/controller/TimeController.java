@@ -69,7 +69,7 @@ public class TimeController {
 		if (task == null) {
 			throw new IllegalArgumentException();
 		}
-
+		Log.d("Dev", "TimeController startTask()");
 		mTrackytAdapter.startTask(token, task.getId());
 		addTaskInQueue(task);
 	}

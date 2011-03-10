@@ -9,12 +9,13 @@ import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,7 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity implements TasksScreen {
-	List<Task> taskList; // TODO: change to Map
+	List<Task> taskList; 
 	RequestMaker requestMaker;
 
 	MyAdapter mAdapter;
@@ -40,10 +41,14 @@ public class TasksBoard extends Activity implements TasksScreen {
 	EditText editText;
 
 	MDialog itemPressDialog;
-	ProgressDialog pDialogGetTasks;
 
 	TimeController timeController;
 	ProgressDialog progressDialog;
+	
+	ADialog alert;
+	
+//	AlertDialog.Builder builder;
+//	AlertDialog alert;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,15 @@ public class TasksBoard extends Activity implements TasksScreen {
 		initializeControls();
 
 		new TasksLoader().execute();
+		alert = new ADialog(this);
+		
+//		builder = new AlertDialog.Builder(this);
+//		builder.setTitle("Task");
+//		builder.setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
+//		    public void onClick(DialogInterface dialog, int item) {
+//		    }
+//		});
+//		alert = builder.create();
 	}
 
 	@Override
@@ -70,8 +84,15 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 	@Override
 	public void updateUI() {
-		Log.d("Dev", "updateUI() invoked");
-		mAdapter.notifyDataSetChanged();
+		if (mAdapter != null) 
+			mAdapter.notifyDataSetChanged();
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (mAdapter != null) 
+			updateUI();
 	}
 
 	public void onClickOKButton(View view) {
@@ -155,6 +176,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 			return v;
 		}
+		
 	}
 
 	private class TasksLoader extends AsyncTask<Void, Void, Boolean> {
@@ -199,15 +221,17 @@ public class TasksBoard extends Activity implements TasksScreen {
 			updateUI();
 			timeController.runCount();
 
-			listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-				public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long arg3) {
-					Task task = (Task) listView.getItemAtPosition(position);
-					itemPressDialog.setTask(task);
-					itemPressDialog.show();
-					updateUI();
-					return false;
+//					Task task = (Task) listView.getItemAtPosition(position);
+//					itemPressDialog.setTask(task);
+//					itemPressDialog.show();
+//					updateUI();
+					alert.show();
 				}
 			});
 
@@ -220,14 +244,13 @@ public class TasksBoard extends Activity implements TasksScreen {
 		@Override
 		protected Boolean doInBackground(Void... params) {
 			String taskDescription = editText.getText().toString();
-			final Task task = new Task(taskDescription);
-			task.parseTime(); // TODO: ?
-			taskList.add(task);
+			Task task = new Task(taskDescription);
+			task.parseTime();
+//			taskList.add(task);
 			publishProgress();
 			try {
 				timeController.addNewTask(task.getDescription());
-				timeController.loadTasks();
-				editText.setText("");
+//				taskList = timeController.loadTasks();
 				return true;
 			} catch (Exception e) {
 				taskList.remove(task);
@@ -247,7 +270,9 @@ public class TasksBoard extends Activity implements TasksScreen {
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
 			if (result) {
+				new TasksLoader().execute();
 				updateUI();
+				editText.setText("");
 				Toast.makeText(getApplicationContext(), "Task created",
 						Toast.LENGTH_SHORT).show();
 			} else {

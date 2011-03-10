@@ -42,8 +42,8 @@ public class Login extends Activity {
 		createAccountButton = (Button) findViewById(R.id.create_account_button);
 		mAdapter = TrackytApiAdapterFactory.createV11Adapter();
 
-		loginEditText.setText("ebeletskiy@gmail.com");
-		passwordEditText.setText("mikusya");
+		loginEditText.setText("test@gmail.com");
+		passwordEditText.setText("m");
 		
 	}
 

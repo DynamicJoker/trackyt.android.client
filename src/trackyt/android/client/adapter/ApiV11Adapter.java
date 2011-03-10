@@ -58,6 +58,7 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		try {
 			receivedString = requestMaker.getAllTasks(token);
 		} catch (HttpException e) {
+			Log.d("Dev", "Request/Response from/to server was unsuccessful");
 			throw new Exception("Request/Response from/to server was unsuccessful");
 		}
 		Log.d("Dev", "Back to adapter");
@@ -70,7 +71,6 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		
 		for (Task task : response.getTasksList()) {
 			task.parseTime();
-//			Log.d("Dev", "Parsing a time in Adapter");
 		}
 		
 		return response.getTasksList();

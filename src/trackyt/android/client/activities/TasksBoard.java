@@ -205,7 +205,9 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 			setupListView();
 			updateUI();
-			timeController.runCount();
+			if (!timeController.getCounterFlag()) {
+				timeController.runCount();
+			}
 
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 

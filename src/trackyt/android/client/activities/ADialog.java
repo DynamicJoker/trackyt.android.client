@@ -26,7 +26,7 @@ public class ADialog {
 	
 	public void init() {
 		builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("Task");
+		builder.setTitle("Action");
 		builder.setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
 		    	switch (item){

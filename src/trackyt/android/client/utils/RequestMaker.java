@@ -21,12 +21,14 @@ import android.util.Log;
 public class RequestMaker {
 	
 	private static final RequestMaker REQUEST_MAKER = new RequestMaker(); 
+	private static final String TAG = "RequestMaker";
 	
 	private HttpManager httpManager;
 	private List<NameValuePair> params;
 	private UrlComposer urlComposer;
 	
 	private RequestMaker() {
+		if (MyConfig.DEBUG) Log.d(TAG, "Instance created");
 		httpManager = new HttpManager();
 		urlComposer = new UrlComposer();
 	}
@@ -36,6 +38,7 @@ public class RequestMaker {
 	}
 	
 	public String authenticate(String email, String password) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "authenticate()");
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer.composeUrl(MyConfig.POST_AUTH_URL);
 		HttpPost httpPost = new HttpPost(uri);
@@ -56,6 +59,7 @@ public class RequestMaker {
 	}
 	
 	public String getAllTasks(ApiToken token) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "getAllTasks()");
 
 		URI uri = urlComposer.composeUrl(MyConfig.GET_TASKS_URL, token);
 		HttpGet httpGet = new HttpGet(uri);
@@ -66,6 +70,7 @@ public class RequestMaker {
 	}
 	
 	public String addTask(ApiToken token, String description) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "addTask()");
 		params = new ArrayList<NameValuePair>();
 		URI uri = urlComposer.composeUrl(MyConfig.POST_ADD_TASK_URL, token); 
 		HttpPost httpPost = new HttpPost(uri);
@@ -85,6 +90,7 @@ public class RequestMaker {
 	}
 	
 	public String deleteTask(ApiToken token, int taskId) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "deleteTask()");
 		URI uri = urlComposer.composeUrl(MyConfig.DELETE_TASK_URL, token); 
 		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpDelete httpDelete = new HttpDelete(urlToSend);
@@ -94,6 +100,7 @@ public class RequestMaker {
 	}
 	
 	public String startTask(ApiToken token, int taskId) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "startTask()");
 		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_TASK_URL, token); 
 		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpPut httpPut = new HttpPut(urlToSend);
@@ -103,6 +110,7 @@ public class RequestMaker {
 	}
 	
 	public String stopTask(ApiToken token, int taskId) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "stopTask()");
 		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_TASK_URL, token); 
 		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
 		HttpPut httpPut = new HttpPut(urlToSend);
@@ -112,6 +120,7 @@ public class RequestMaker {
 	}
     
 	public String startAllTasks(ApiToken token) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "startAllTasks()");
 		
 		URI uri = urlComposer.composeUrl(MyConfig.PUT_START_ALL_TASK_URL, token); 
 		HttpPut httpPut = new HttpPut(uri);
@@ -121,6 +130,7 @@ public class RequestMaker {
 	}
 	
 	public String stopAllTasks(ApiToken token) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "stopAllTasks()");
 		
 		URI uri = urlComposer.composeUrl(MyConfig.PUT_STOP_ALL_TASK_URL, token); 
 		HttpPut httpPut = new HttpPut(uri);

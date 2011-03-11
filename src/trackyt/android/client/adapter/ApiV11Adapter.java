@@ -15,6 +15,7 @@ import trackyt.android.client.reponses.DeleteTaskResponse;
 import trackyt.android.client.reponses.GetAllTasksResponse;
 import trackyt.android.client.reponses.StartTaskResponse;
 import trackyt.android.client.reponses.StopTaskResponse;
+import trackyt.android.client.utils.MyConfig;
 import trackyt.android.client.utils.RequestMaker;
 import android.util.Log;
 
@@ -22,7 +23,8 @@ import com.google.gson.Gson;
 
 public class ApiV11Adapter implements TrackytApiAdapter {
 
-	RequestMaker requestMaker;
+	private static final String TAG = "ApiV11Adapter.class";
+	private RequestMaker requestMaker;
 
 	public ApiV11Adapter() {
 		requestMaker = RequestMaker.getInstance();
@@ -31,6 +33,9 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 	@Override
 	public ApiToken authenticate(String email, String password)
 			throws NotAuthenticatedException {
+		
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "authenticate()");
 		
 		String receivedString;
 		
@@ -53,6 +58,13 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public List<Task> getAllTasks(ApiToken token) throws Exception {
+		if (token == null) {
+			throw new IllegalArgumentException("token can't be null");
+		}
+		
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "getAllTasks()");
+		
 		String receivedString;
 		
 		try {
@@ -61,9 +73,7 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 			Log.d("Dev", "Request/Response from/to server was unsuccessful");
 			throw new Exception("Request/Response from/to server was unsuccessful");
 		}
-		Log.d("Dev", "Back to adapter");
 		GetAllTasksResponse response = new Gson().fromJson(receivedString, GetAllTasksResponse.class);
-		Log.d("Dev", "Parcing finished");
 		
 		if (!response.success) {
 			throw new Exception("Get all tasks operation was unsuccessful");
@@ -78,6 +88,9 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public Task addTask(ApiToken token, String description) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "addTask()");
+		
 		String receivedString;
 		
 		try {
@@ -99,6 +112,8 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public int deleteTask(ApiToken token, int taskId) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "deleteTask()");
 		String receivedString;
 		
 		try {
@@ -118,6 +133,9 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public Task startTask(ApiToken token, int taskId) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "startTask()");
+		
 		String receivedString;
 		
 		try {
@@ -139,6 +157,8 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public Task stopTask(ApiToken token, int taskId) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "stopTask()");
 		String receivedString;
 		
 		try {
@@ -160,6 +180,8 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public void startAll(ApiToken token) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "startAll()");
 		String receivedString;
 		
 		try {
@@ -177,6 +199,8 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 
 	@Override
 	public void stopAll(ApiToken token) throws Exception {
+		if (MyConfig.DEBUG)
+			Log.d(TAG, "stopAll()");
 		String receivedString;
 		
 		try {

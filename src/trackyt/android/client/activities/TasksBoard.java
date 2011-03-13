@@ -57,8 +57,8 @@ public class TasksBoard extends Activity implements TasksScreen {
 		TrackytApiAdapterFactory.createV11Adapter(), new ApiToken(token));
 		itemPressDialog = new MDialog(timeController, this);
 
-		initializeControls();
-
+		listView = (ListView) findViewById(R.id.list_view);
+		
 		new TasksLoader().execute();
 		alert = new ADialog(this, timeController);
 	}
@@ -82,7 +82,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 	}
 
 	public void onClickOKButton(View view) {
-
+		
 		new AddNewTask().execute();
 	}
 
@@ -116,12 +116,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
 		listView.setAdapter(mAdapter);
 		listView.setCacheColorHint(Color.WHITE);
-	}
-
-	private void initializeControls() {
-		okButton = (Button) findViewById(R.id.ok_button);
-		editText = (EditText) findViewById(R.id.edit_text);
-		listView = (ListView) findViewById(R.id.list_view);
 	}
 
 	private class MyAdapter extends ArrayAdapter<Task> {
@@ -229,6 +223,9 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
+			okButton = (Button) findViewById(R.id.ok_button);
+			editText = (EditText) findViewById(R.id.edit_text);
+			
 			String taskDescription = editText.getText().toString();
 			Task task = new Task(taskDescription);
 			task.parseTime();

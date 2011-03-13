@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends Activity implements TasksScreen {
-	List<Task> taskList; 
+	List<Task> taskList;
 	RequestMaker requestMaker;
 
 	MyAdapter mAdapter;
@@ -42,7 +42,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 	TimeController timeController;
 	ProgressDialog progressDialog;
-	
+
 	ADialog alert;
 
 	@Override
@@ -54,11 +54,12 @@ public class TasksBoard extends Activity implements TasksScreen {
 		String token = (String) extras.get("token");
 
 		timeController = new TimeController(this,
-		TrackytApiAdapterFactory.createV11Adapter(), new ApiToken(token));
+				TrackytApiAdapterFactory.createV11Adapter(),
+				new ApiToken(token));
 		itemPressDialog = new MDialog(timeController, this);
 
 		listView = (ListView) findViewById(R.id.list_view);
-		
+
 		new TasksLoader().execute();
 		alert = new ADialog(this, timeController);
 	}
@@ -70,19 +71,19 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 	@Override
 	public void updateUI() {
-		if (mAdapter != null) 
+		if (mAdapter != null)
 			mAdapter.notifyDataSetChanged();
 	}
-	
+
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (mAdapter != null) 
+		if (mAdapter != null)
 			updateUI();
 	}
 
 	public void onClickOKButton(View view) {
-		
+
 		new AddNewTask().execute();
 	}
 
@@ -123,40 +124,46 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 		public MyAdapter(Context context, int resource, List<Task> list) {
 			super(context, resource, list);
-			/* Getting inflater from the received context */
 			mInflater = LayoutInflater.from(context);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View v = convertView;
+			ViewHolder viewHolder;
 
+			Task task = taskList.get(position);
+			
 			if (v == null) {
 				v = mInflater.inflate(R.layout.list_item, null);
+				viewHolder = new ViewHolder(v);
+				v.setTag(viewHolder);
+			} else {
+				viewHolder = (ViewHolder) v.getTag(); 
 			}
-
-			/* Take an instance of your Object from taskList */
-			Task task = taskList.get(position);
-
-			/* Setup views from your layout using data in Object */
-			if (task != null) {
-				TextView tvDescription = (TextView) v
-						.findViewById(R.id.task_text_view);
-				TextView tvTime = (TextView) v
-						.findViewById(R.id.time_text_view);
-
-				if (tvDescription != null) {
-					tvDescription.setText(task.getDescription());
-				}
-
-				if (tvTime != null) {
-					tvTime.setText(task.showTime());
-				}
-			}
+			
+			viewHolder.populateFrom(task);
 
 			return v;
 		}
-		
+
+	}
+
+	static class ViewHolder {
+		private TextView description;
+		private TextView time;
+		private View view;
+
+		ViewHolder(View view) {
+			this.view = view;
+			description = (TextView) view.findViewById(R.id.task_text_view);
+			time = (TextView) view.findViewById(R.id.time_text_view);
+		}
+
+		void populateFrom(Task task) {
+			description.setText(task.getDescription());
+			time.setText(task.showTime());
+		}
 	}
 
 	private class TasksLoader extends AsyncTask<Void, Void, Boolean> {
@@ -182,18 +189,18 @@ public class TasksBoard extends Activity implements TasksScreen {
 		@Override
 		protected void onProgressUpdate(Void... values) {
 			super.onProgressUpdate(values);
-			progressDialog = ProgressDialog.show(TasksBoard.this,
-					"", "Loading tasks. Please wait...");
+			progressDialog = ProgressDialog.show(TasksBoard.this, "",
+					"Loading tasks. Please wait...");
 		}
 
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			
+
 			if (!result) {
 				Toast.makeText(getApplicationContext(),
 						"Something wrong happened, try again",
-						Toast.LENGTH_SHORT).show(); 
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
@@ -204,7 +211,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 			}
 
 			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
@@ -225,7 +231,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 		protected Boolean doInBackground(Void... params) {
 			okButton = (Button) findViewById(R.id.ok_button);
 			editText = (EditText) findViewById(R.id.edit_text);
-			
+
 			String taskDescription = editText.getText().toString();
 			Task task = new Task(taskDescription);
 			task.parseTime();
@@ -264,7 +270,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 		}
 
 	}
-	
+
 	private class StartAll extends AsyncTask<Void, Void, Boolean> {
 
 		@Override
@@ -299,7 +305,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 			}
 		}
 	}
-	
+
 	private class StopAll extends AsyncTask<Void, Void, Boolean> {
 
 		@Override

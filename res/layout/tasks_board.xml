@@ -7,24 +7,6 @@
   android:orientation="vertical"
   android:background="#ffffff">
   
-  <RelativeLayout
-  	android:layout_width="fill_parent"
-  	android:layout_height="wrap_content"
-  	android:padding="10dp"
-  	android:background="#ffffff"
-  	>
-  	
-  	<Button
- 		android:id="@+id/ok_button"
- 		android:onClick="onClickOKButton"
- 		android:text="OK"
- 		android:layout_width="wrap_content" 		
- 		android:layout_height="wrap_content"
- 		android:minWidth="60dp"
- 		android:layout_alignParentRight="true">
- 		<requestFocus />
- 	</Button> 	
-  	
   	<!--  Created to remove focus from EditText -->
   	<LinearLayout android:focusable="true"
     	android:focusableInTouchMode="true"
@@ -35,12 +17,9 @@
  		android:id="@+id/edit_text"
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
- 		android:hint="New task's description"
- 		android:layout_toLeftOf="@id/ok_button">
+ 		android:hint="New task's description">
  	</EditText>
   	
-  </RelativeLayout>
-
 <ListView
 	android:id="@+id/list_view"  	
 	android:layout_width="fill_parent"

@@ -35,7 +35,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 	MyAdapter mAdapter;
 
 	ListView listView;
-	Button okButton;
+//	Button okButton;
 	EditText editText;
 
 	MDialog itemPressDialog;
@@ -229,7 +229,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-			okButton = (Button) findViewById(R.id.ok_button);
+//			okButton = (Button) findViewById(R.id.ok_button);
 			editText = (EditText) findViewById(R.id.edit_text);
 
 			String taskDescription = editText.getText().toString();

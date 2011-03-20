@@ -36,7 +36,9 @@
 			  	<EditText
 			  		android:id="@+id/login_edit_text"
 			  		android:layout_width="fill_parent"
-			  		android:layout_height="wrap_content">
+			  		android:layout_height="wrap_content"
+			  		android:singleLine="true">
+			  		
 			  	</EditText>
 			  	
 			  	<TextView
@@ -50,7 +52,8 @@
 			  	<EditText
 			  		android:id="@+id/password_edit_text"
 			  		android:layout_width="fill_parent"
-			  		android:layout_height="wrap_content">
+			  		android:layout_height="wrap_content"
+			  		android:singleLine="true">
 			  	</EditText>
 			  	
 			  	<Button

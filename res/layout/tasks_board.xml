@@ -17,7 +17,10 @@
  		android:id="@+id/edit_text"
  		android:layout_width="fill_parent"
  		android:layout_height="wrap_content"
- 		android:hint="New task's description">
+ 		android:hint="New task's description"
+ 		android:lines="1"
+ 		android:singleLine="true"
+ 		android:imeOptions="actionDone">
  	</EditText>
   	
 <ListView

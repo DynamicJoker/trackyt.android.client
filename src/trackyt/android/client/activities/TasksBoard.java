@@ -14,6 +14,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +23,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,7 +35,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 	MyAdapter mAdapter;
 
 	ListView listView;
-//	Button okButton;
 	EditText editText;
 
 	MDialog itemPressDialog;
@@ -59,6 +58,15 @@ public class TasksBoard extends Activity implements TasksScreen {
 		itemPressDialog = new MDialog(timeController, this);
 
 		listView = (ListView) findViewById(R.id.list_view);
+		editText = (EditText) findViewById(R.id.edit_text);
+		editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				new AddNewTask().execute();
+				return true;
+			}
+		});
 
 		new TasksLoader().execute();
 		alert = new ADialog(this, timeController);
@@ -81,12 +89,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 		if (mAdapter != null)
 			updateUI();
 	}
-
-	public void onClickOKButton(View view) {
-
-		new AddNewTask().execute();
-	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -229,9 +232,6 @@ public class TasksBoard extends Activity implements TasksScreen {
 
 		@Override
 		protected Boolean doInBackground(Void... params) {
-//			okButton = (Button) findViewById(R.id.ok_button);
-			editText = (EditText) findViewById(R.id.edit_text);
-
 			String taskDescription = editText.getText().toString();
 			Task task = new Task(taskDescription);
 			task.parseTime();

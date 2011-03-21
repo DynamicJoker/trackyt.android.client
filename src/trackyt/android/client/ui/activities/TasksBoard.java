@@ -1,4 +1,4 @@
-package trackyt.android.client.activities;
+package trackyt.android.client.ui.activities;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import trackyt.android.client.TrackytApiAdapterFactory;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.ui.dialog.ADialog;
+import trackyt.android.client.ui.dialog.MDialog;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;

@@ -1,4 +1,4 @@
-package trackyt.android.client.activities;
+package trackyt.android.client.ui.activities;
 
 import java.util.List;
 

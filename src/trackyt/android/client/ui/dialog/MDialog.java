@@ -1,4 +1,4 @@
-package trackyt.android.client.activities;
+package trackyt.android.client.ui.dialog;
 
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;

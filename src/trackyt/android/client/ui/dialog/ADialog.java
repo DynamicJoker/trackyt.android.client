@@ -1,4 +1,6 @@
-package trackyt.android.client.activities;
+package trackyt.android.client.ui.dialog;
+
+import java.util.List;
 
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
@@ -8,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class ADialog {
@@ -26,7 +29,7 @@ public class ADialog {
 	
 	public void init() {
 		builder = new AlertDialog.Builder(mContext);
-		builder.setTitle("Action");
+		builder.setTitle("Task Action");
 		builder.setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
 		    	switch (item){
@@ -141,5 +144,15 @@ public class ADialog {
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+	
+	private class MyAdapter extends ArrayAdapter<String> {
+
+		public MyAdapter(Context context, int resource, int textViewResourceId,
+				List<String> objects) {
+			super(context, resource, textViewResourceId, objects);
+		}
+
+		
 	}
 }

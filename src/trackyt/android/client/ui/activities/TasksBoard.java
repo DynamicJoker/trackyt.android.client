@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class TasksBoard extends Activity implements TasksScreen {
 	ProgressDialog progressDialog;
 
 	ADialog alert;
+	TabHost mTab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,20 @@ public class TasksBoard extends Activity implements TasksScreen {
 				return true;
 			}
 		});
+		
+		mTab = (TabHost) findViewById(R.id.tabhost);
+		mTab.setup();
+		TabHost.TabSpec spec = mTab.newTabSpec("All");
 
+		spec.setContent(R.id.all_tab);
+		spec.setIndicator("All", getResources().getDrawable(R.drawable.emo_im_cool));
+		mTab.addTab(spec);
+		
+		spec = mTab.newTabSpec("Done");
+		spec.setContent(R.id.done_tab);
+		spec.setIndicator("Done", getResources().getDrawable(R.drawable.emo_im_happy));
+		mTab.addTab(spec);
+		
 		new TasksLoader().execute();
 		alert = new ADialog(this, timeController);
 	}

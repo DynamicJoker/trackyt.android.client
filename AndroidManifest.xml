@@ -2,20 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="trackyt.android.client" android:versionCode="1"
 	android:versionName="1.0">
-	
+
 	<application android:icon="@drawable/icon" android:label="@string/app_name"
 		android:debuggable="true" android:theme="@android:style/Theme.NoTitleBar">
-			<activity android:name="trackyt.android.client.ui.activities.Login" android:label="@string/app_name">
+		<activity android:name="trackyt.android.client.ui.activities.Login"
+			android:label="@string/app_name">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-			</activity>
-			<activity android:name="trackyt.android.client.ui.activities.TasksBoard"></activity>
+		</activity>
+		<activity android:name="trackyt.android.client.ui.activities.TasksBoard"></activity>
 
-</application>
+	</application>
 
 
 
-<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

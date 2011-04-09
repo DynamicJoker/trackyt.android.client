@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent" 
-  android:orientation="vertical"
-  android:background="#ffffff">
-  
-  	<!--  Created to remove focus from EditText -->
-  	<LinearLayout android:focusable="true"
-    	android:focusableInTouchMode="true"
-    	android:layout_width="0px"
-        android:layout_height="0px" />
-  	
- 	<EditText
- 		android:id="@+id/edit_text"
- 		android:layout_width="fill_parent"
- 		android:layout_height="wrap_content"
- 		android:hint="New task's description"
- 		android:lines="1"
- 		android:singleLine="true"
- 		android:imeOptions="actionDone">
- 	</EditText>
-  	
-<ListView
-	android:id="@+id/list_view"  	
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/tabhost" 
 	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:padding="10dp"
-	android:divider="#206600"
-	android:dividerHeight="2dp"
-	android:smoothScrollbar="true"
-	>
-</ListView>
-  
-</LinearLayout>
+	android:layout_height="fill_parent">
+	
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	
+	<TabWidget android:id="@android:id/tabs"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"/>
+		
+	<FrameLayout android:id="@android:id/tabcontent"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+
+		<LinearLayout
+		  android:id="@+id/all_tab"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent" 
+		  android:orientation="vertical"
+		  android:background="#ffffff">
+		  
+		  	<!--  Created to remove focus from EditText -->
+		  	<LinearLayout android:focusable="true"
+		    	android:focusableInTouchMode="true"
+		    	android:layout_width="0px"
+		        android:layout_height="0px" />
+		  	
+		 	<EditText
+		 		android:id="@+id/edit_text"
+		 		android:layout_width="fill_parent"
+		 		android:layout_height="wrap_content"
+		 		android:hint="New task's description"
+		 		android:lines="1"
+		 		android:singleLine="true"
+		 		android:imeOptions="actionDone">
+		 	</EditText>
+		  	
+		<ListView
+			android:id="@+id/list_view"  	
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:padding="10dp"
+			android:divider="#206600"
+			android:dividerHeight="2dp"
+			android:smoothScrollbar="true">
+		</ListView>
+		  
+		</LinearLayout>
+		
+		<LinearLayout
+		  android:id="@+id/done_tab"
+		  android:layout_width="fill_parent"
+		  android:layout_height="fill_parent" 
+		  android:orientation="vertical"
+		  android:background="#ffffff"/>
+		
+		</FrameLayout>
+		</LinearLayout>
+	
+</TabHost>

@@ -138,4 +138,17 @@ public class RequestMaker {
 		String receivedString = httpManager.request(httpPut);
 		return receivedString;
 	}
+	
+	public String doneTask(ApiToken token, int taskId) throws HttpException {
+		if (MyConfig.DEBUG) Log.d(TAG, "doneTask()");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.GET_DONE_TASK_URL, token);
+		String urlToSend = MyConfig.WEB_SERVER + uri.getPath() + taskId;
+		HttpGet httpGet = new HttpGet(urlToSend);
+		
+		String receivedString = httpManager.request(httpGet);
+		Log.d(TAG, "test: receivedString: " + receivedString);
+		return receivedString;
+		
+	}
 }

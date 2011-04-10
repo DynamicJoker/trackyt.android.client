@@ -4,5 +4,6 @@
 	<item>Start</item>
 	<item>Stop</item>
 	<item>Delete</item>
+	<item>Done</item>
 </string-array>
 </resources>

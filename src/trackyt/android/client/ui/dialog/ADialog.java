@@ -42,6 +42,9 @@ public class ADialog {
 		    	case 2:
 		    		new DeleteTask().execute();
 		    		break;
+		    	case 3:
+		    		new DoneTask().execute();
+		    		break;
 		    	}
 		    }
 		});
@@ -146,13 +149,45 @@ public class ADialog {
 		}
 	}
 	
-	private class MyAdapter extends ArrayAdapter<String> {
+	private class DoneTask extends AsyncTask<Void, Void, Boolean> {
 
-		public MyAdapter(Context context, int resource, int textViewResourceId,
-				List<String> objects) {
-			super(context, resource, textViewResourceId, objects);
+		@Override
+		protected Boolean doInBackground(Void... params) {
+			publishProgress();
+			try {
+				timeController.doneTask(task);
+				return true;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
+			}
 		}
-
+		
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+			Toast.makeText(mContext, "Marking task as done...", Toast.LENGTH_SHORT).show();
+		}
+		
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			if (result) {
+				Toast.makeText(mContext, "Task was marked as done on server", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(mContext, "Task wasn't marked as done, try again", Toast.LENGTH_SHORT).show();
+			}
+		}
 		
 	}
+	
+//	private class MyAdapter extends ArrayAdapter<String> {
+//
+//		public MyAdapter(Context context, int resource, int textViewResourceId,
+//				List<String> objects) {
+//			super(context, resource, textViewResourceId, objects);
+//		}
+//
+//		
+//	}
 }

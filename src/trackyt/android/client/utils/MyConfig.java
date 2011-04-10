@@ -13,4 +13,5 @@ public class MyConfig {
 	public static final String PUT_STOP_TASK_URL = "/api/v1.1/<token>/tasks/stop/";
 	public static final String PUT_START_ALL_TASK_URL = "/api/v1.1/<token>/tasks/start/all/";
 	public static final String PUT_STOP_ALL_TASK_URL = "/api/v1.1/<token>/tasks/stop/all/";
+	public static final String GET_DONE_TASK_URL = "/api/v1.1/<token>/tasks/done/";
 }

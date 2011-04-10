@@ -100,6 +100,13 @@ public class TimeController {
 		tasksBoard.getTaskList().remove(task);
 		removeTaskFromQueue(task);
 	}
+	
+	public void doneTask(Task task) throws Exception {
+		if (MyConfig.DEBUG) Log.d(TAG, "doneTask()");
+		mTrackytAdapter.doneTask(token, task.getId());
+		tasksBoard.getTaskList().remove(task);
+		removeTaskFromQueue(task);
+	}
 
 	public void updateTime(int value) {
 		if (MyConfig.DEBUG) Log.d(TAG, "updateTime()");

@@ -1,7 +1,5 @@
 package trackyt.android.client.ui.dialog;
 
-import java.util.List;
-
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
@@ -10,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class ADialog {

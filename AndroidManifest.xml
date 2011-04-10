@@ -13,6 +13,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="trackyt.android.client.ui.activities.TasksBoard"></activity>
+		<activity android:name="trackyt.android.client.ui.activities.TasksDone"></activity>
 
 	</application>
 

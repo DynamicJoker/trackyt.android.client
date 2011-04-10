@@ -175,16 +175,5 @@ public class ADialog {
 				Toast.makeText(mContext, "Task wasn't marked as done, try again", Toast.LENGTH_SHORT).show();
 			}
 		}
-		
 	}
-	
-//	private class MyAdapter extends ArrayAdapter<String> {
-//
-//		public MyAdapter(Context context, int resource, int textViewResourceId,
-//				List<String> objects) {
-//			super(context, resource, textViewResourceId, objects);
-//		}
-//
-//		
-//	}
 }

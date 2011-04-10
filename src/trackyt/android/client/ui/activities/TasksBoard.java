@@ -8,11 +8,11 @@ import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
 import trackyt.android.client.ui.dialog.ADialog;
-import trackyt.android.client.ui.dialog.MDialog;
 import trackyt.android.client.utils.RequestMaker;
-import android.app.Activity;
+import android.app.ActivityGroup;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,22 +31,18 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TasksBoard extends Activity implements TasksScreen {
-	List<Task> taskList;
-	RequestMaker requestMaker;
+public class TasksBoard extends ActivityGroup implements TasksScreen {
+	public static String token;
+	public static TimeController timeController;
+	public static RequestMaker requestMaker;
 
-	MyAdapter mAdapter;
-
-	ListView listView;
-	EditText editText;
-
-	MDialog itemPressDialog;
-
-	TimeController timeController;
-	ProgressDialog progressDialog;
-
-	ADialog alert;
-	TabHost mTab;
+	private List<Task> taskList;
+	private MyAdapter mAdapter;
+	private ListView listView;
+	private EditText editText;
+	private ProgressDialog progressDialog;
+	private ADialog alert;
+	private TabHost mTab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +50,11 @@ public class TasksBoard extends Activity implements TasksScreen {
 		setContentView(R.layout.tasks_board);
 
 		Bundle extras = getIntent().getExtras();
-		String token = (String) extras.get("token");
+		token = (String) extras.get("token");
 
 		timeController = new TimeController(this,
 				TrackytApiAdapterFactory.createV11Adapter(),
 				new ApiToken(token));
-		itemPressDialog = new MDialog(timeController, this);
 
 		listView = (ListView) findViewById(R.id.list_view);
 		editText = (EditText) findViewById(R.id.edit_text);
@@ -73,15 +68,22 @@ public class TasksBoard extends Activity implements TasksScreen {
 		});
 		
 		mTab = (TabHost) findViewById(R.id.tabhost);
-		mTab.setup();
+//		mTab.setup();
 		TabHost.TabSpec spec = mTab.newTabSpec("All");
+		mTab.setup(this.getLocalActivityManager());
 
 		spec.setContent(R.id.all_tab);
 		spec.setIndicator("All", getResources().getDrawable(R.drawable.emo_im_cool));
 		mTab.addTab(spec);
 		
+//		spec = mTab.newTabSpec("Done");
+//		spec.setContent(R.id.done_tab);
+//		spec.setIndicator("Done", getResources().getDrawable(R.drawable.emo_im_happy));
+//		mTab.addTab(spec);
+		
+		Intent intent = new Intent().setClass(this, TasksDone.class);
 		spec = mTab.newTabSpec("Done");
-		spec.setContent(R.id.done_tab);
+		spec.setContent(intent);
 		spec.setIndicator("Done", getResources().getDrawable(R.drawable.emo_im_happy));
 		mTab.addTab(spec);
 		

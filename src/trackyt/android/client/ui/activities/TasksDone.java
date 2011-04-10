@@ -41,6 +41,10 @@ public class TasksDone extends ActivityGroup {
 		token = TasksBoard.token;
 		timeController = TasksBoard.timeController;
 		requestMaker = TasksBoard.requestMaker;
+		
+		listView = (ListView) findViewById(R.id.list_view_done);
+		
+		new TasksLoader().execute();
 	}
 	
 	private class MyAdapter extends ArrayAdapter<Task> {
@@ -97,7 +101,7 @@ public class TasksDone extends ActivityGroup {
 
 			try {
 				publishProgress();
-				taskList = timeController.loadTasks();
+				taskList = timeController.loadDoneTasks();
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -130,17 +134,6 @@ public class TasksDone extends ActivityGroup {
 
 			setupListView();
 			updateUI();
-
-			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-					Task task = (Task) listView.getItemAtPosition(position);
-					alert.setTask(task);
-					alert.show();
-				}
-			});
 
 			progressDialog = null;
 		}

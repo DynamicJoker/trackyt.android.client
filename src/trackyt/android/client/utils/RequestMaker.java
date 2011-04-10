@@ -149,6 +149,17 @@ public class RequestMaker {
 		String receivedString = httpManager.request(httpGet);
 		Log.d(TAG, "test: receivedString: " + receivedString);
 		return receivedString;
+	}
+
+	public String getDoneTask(ApiToken token) throws HttpException {
 		
+		if (MyConfig.DEBUG) Log.d(TAG, "getDoneTask()");
+		
+		URI uri = urlComposer.composeUrl(MyConfig.GET_DONE_TASKS_URL, token);
+		HttpGet httpGet = new HttpGet(uri);
+		
+		String receivedString = httpManager.request(httpGet);
+		Log.d(TAG, "test: receivedString: " + receivedString);
+		return receivedString;
 	}
 }

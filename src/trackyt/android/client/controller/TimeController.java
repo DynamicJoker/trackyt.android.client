@@ -16,7 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 
 public class TimeController {
-	private static final String TAG = "MyActivity";
+	private static final String TAG = "TimeController";
 
 	private TasksScreen tasksBoard; 
 	private Map<Integer, Task> tasksToUpdate;
@@ -107,9 +107,14 @@ public class TimeController {
 		tasksBoard.getTaskList().remove(task);
 		removeTaskFromQueue(task);
 	}
+	
+	public List<Task> loadDoneTasks() throws Exception {
+		if (MyConfig.DEBUG) Log.d(TAG, "loadDoneTask()");
+		return mTrackytAdapter.getDoneTasks(token);
+	}
 
 	public void updateTime(int value) {
-		if (MyConfig.DEBUG) Log.d(TAG, "updateTime()");
+//		if (MyConfig.DEBUG) Log.d(TAG, "updateTime()");
 		Collection<Task> collection = tasksToUpdate.values();
 		Iterator<Task> iterator = collection.iterator();
 
@@ -149,7 +154,7 @@ public class TimeController {
 	}
 
 	public void updateUI() {
-		if (MyConfig.DEBUG) Log.d(TAG, "updateUI()");
+//		if (MyConfig.DEBUG) Log.d(TAG, "updateUI()");
 		tasksBoard.updateUI();
 	}
 	

@@ -84,5 +84,13 @@ public interface TrackytApiAdapter {
 	 * @throws Exception
 	 */
 	void doneTask(ApiToken token, int taskId) throws Exception;
+
+
+	/**
+	 * Loads tasks marked as completed
+	 * @param API authentication token
+	 * @throws Exception
+	 */
+	List<Task> getDoneTasks(ApiToken token) throws Exception;
 	
 }

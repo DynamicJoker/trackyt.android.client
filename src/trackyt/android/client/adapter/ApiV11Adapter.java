@@ -235,4 +235,29 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		}
 	}
 
+	@Override
+	public List<Task> getDoneTasks(ApiToken token) throws Exception {
+		if (MyConfig.DEBUG) Log.d(TAG, "getDoneTask()");
+		
+		String receivedString;
+		
+		try {
+			receivedString = requestMaker.getDoneTask(token);
+		} catch (HttpException e) {
+			throw new Exception("Request/Response from/to server was unsuccessful");
+		}
+		
+		GetAllTasksResponse response = new Gson().fromJson(receivedString, GetAllTasksResponse.class);
+		
+		if (!response.success) {
+			throw new Exception("Load Done tasks operation was unsuccessful");
+		}
+		
+		for (Task task : response.getTasksList()) {
+			task.parseTime();
+		}
+		
+		return response.getTasksList();
+	}
+
 }

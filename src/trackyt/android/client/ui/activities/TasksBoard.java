@@ -43,6 +43,8 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	private ProgressDialog progressDialog;
 	private ADialog alert;
 	private TabHost mTab;
+	
+	private TasksDone tasksDoneScreen;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +102,13 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.taskboard_menu, menu);
+		
+		int tab = mTab.getCurrentTab();
+		if (tab == 0) {
+			inflater.inflate(R.menu.taskboard_menu, menu);
+		} else {
+			inflater.inflate(R.menu.tasks_done_menu, menu);
+		}
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -111,6 +119,9 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 		case R.id.menu_refresh:
 			new TasksLoader().execute();
 			return true;
+		case R.id.menu_done_refresh:
+			TasksDone td = (TasksDone)this.getCurrentActivity();
+			td.newTasksLoader();
 		default:
 			return super.onOptionsItemSelected(item);
 		}

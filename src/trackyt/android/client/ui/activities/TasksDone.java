@@ -169,6 +169,10 @@ public class TasksDone extends ActivityGroup implements TasksScreen {
 		return taskList;
 	}
 	
+	public void newTasksLoader() {
+		new TasksLoader().execute();
+	}
+	
 //	@Override
 //	protected void onResume() {
 //		Log.d("Dev", "TasksDone: onResume()");

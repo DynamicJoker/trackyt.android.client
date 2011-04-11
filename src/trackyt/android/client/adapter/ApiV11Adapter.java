@@ -223,7 +223,7 @@ public class ApiV11Adapter implements TrackytApiAdapter {
 		String receivedString;
 		
 		try {
-			receivedString = requestMaker.doneTask(token, taskId);
+			receivedString = requestMaker.setDoneTask(token, taskId);
 		} catch (HttpException e) {
 			throw new Exception("Request/Response from/to server was unsuccessful");
 		}

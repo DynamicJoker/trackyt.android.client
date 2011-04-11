@@ -5,7 +5,7 @@ import java.util.List;
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.ui.dialog.ADialog;
+import trackyt.android.client.ui.dialog.AlertTasksDone;
 import trackyt.android.client.utils.RequestMaker;
 import android.app.ActivityGroup;
 import android.app.ProgressDialog;
@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,16 +23,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class TasksDone extends ActivityGroup {
+public class TasksDone extends ActivityGroup implements TasksScreen {
 	public static String token;
 	public static TimeController timeController;
 	public static RequestMaker requestMaker;
+	public static List<Task> taskList;
 	
-	private List<Task> taskList;
 	private MyAdapter mAdapter;
 	private ListView listView;
 	private ProgressDialog progressDialog;
-	private ADialog alert;
+	private AlertTasksDone alert;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +46,8 @@ public class TasksDone extends ActivityGroup {
 		listView = (ListView) findViewById(R.id.list_view_done);
 		
 		new TasksLoader().execute();
+		
+		alert = new AlertTasksDone(this, timeController, this);
 	}
 	
 	private class MyAdapter extends ArrayAdapter<Task> {
@@ -134,6 +137,17 @@ public class TasksDone extends ActivityGroup {
 
 			setupListView();
 			updateUI();
+			
+			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long arg3) {
+					Task task = (Task) listView.getItemAtPosition(position);
+					alert.setTask(task);
+					alert.show();
+				}
+			});
 
 			progressDialog = null;
 		}
@@ -149,4 +163,23 @@ public class TasksDone extends ActivityGroup {
 		if (mAdapter != null)
 			mAdapter.notifyDataSetChanged();
 	}
+
+	@Override
+	public List<Task> getTaskList() {
+		return taskList;
+	}
+	
+//	@Override
+//	protected void onResume() {
+//		Log.d("Dev", "TasksDone: onResume()");
+//		super.onStart();
+//		if (mAdapter != null)
+//			updateUI();
+//	}
+//	
+//	@Override
+//	protected void onPause() {
+//		super.onPause();
+//		Log.d("Dev", "TasksDone: onPause()");
+//	}
 }

@@ -94,10 +94,11 @@ public class TimeController {
 		removeTaskFromQueue(task);
 	}
 
-	public void deleteTask(final Task task) throws Exception {
+	public void deleteTask(final Task task, List<Task> tasksList) throws Exception {
 		if (MyConfig.DEBUG) Log.d(TAG, "deleteTask()");
 		mTrackytAdapter.deleteTask(token, task.getId());
-		tasksBoard.getTaskList().remove(task);
+//		tasksBoard.getTaskList().remove(task);
+		tasksList.remove(task);
 		removeTaskFromQueue(task);
 	}
 	

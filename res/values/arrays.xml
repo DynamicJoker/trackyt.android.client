@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="select_dialog_items">
+<string-array name="tasks_board_dialog_items">
 	<item>Start</item>
 	<item>Stop</item>
 	<item>Delete</item>
 	<item>Done</item>
 </string-array>
+<string-array name="tasks_done_dialog_items">
+	<item>Delete</item>
+</string-array>
+
 </resources>

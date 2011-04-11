@@ -35,8 +35,8 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	public static String token;
 	public static TimeController timeController;
 	public static RequestMaker requestMaker;
+	public static List<Task> taskList;
 
-	private List<Task> taskList;
 	private MyAdapter mAdapter;
 	private ListView listView;
 	private EditText editText;
@@ -68,18 +68,12 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 		});
 		
 		mTab = (TabHost) findViewById(R.id.tabhost);
-//		mTab.setup();
 		TabHost.TabSpec spec = mTab.newTabSpec("All");
 		mTab.setup(this.getLocalActivityManager());
 
 		spec.setContent(R.id.all_tab);
 		spec.setIndicator("All", getResources().getDrawable(R.drawable.emo_im_cool));
 		mTab.addTab(spec);
-		
-//		spec = mTab.newTabSpec("Done");
-//		spec.setContent(R.id.done_tab);
-//		spec.setIndicator("Done", getResources().getDrawable(R.drawable.emo_im_happy));
-//		mTab.addTab(spec);
 		
 		Intent intent = new Intent().setClass(this, TasksDone.class);
 		spec = mTab.newTabSpec("Done");
@@ -88,7 +82,7 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 		mTab.addTab(spec);
 		
 		new TasksLoader().execute();
-		alert = new ADialog(this, timeController);
+		alert = new ADialog(this, timeController, this);
 	}
 
 	@Override
@@ -102,13 +96,6 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 			mAdapter.notifyDataSetChanged();
 	}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		if (mAdapter != null)
-			updateUI();
-	}
-	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

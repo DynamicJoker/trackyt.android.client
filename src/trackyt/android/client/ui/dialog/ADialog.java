@@ -3,6 +3,8 @@ package trackyt.android.client.ui.dialog;
 import trackyt.android.client.R;
 import trackyt.android.client.controller.TimeController;
 import trackyt.android.client.models.Task;
+import trackyt.android.client.ui.activities.TasksBoard;
+import trackyt.android.client.ui.activities.TasksScreen;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,10 +17,12 @@ public class ADialog {
 	AlertDialog alert;
 	TimeController timeController;
 	Task task;
+	TasksScreen screen;
 	
 	Context mContext;
 	
-	public ADialog(Context context, TimeController timeController) {
+	public ADialog(Context context, TimeController timeController, TasksScreen screen) {
+		this.screen = screen;
 		mContext = context;
 		this.timeController = timeController;
 		init();
@@ -27,7 +31,7 @@ public class ADialog {
 	public void init() {
 		builder = new AlertDialog.Builder(mContext);
 		builder.setTitle("Task Action");
-		builder.setItems(R.array.select_dialog_items, new DialogInterface.OnClickListener() {
+		builder.setItems(R.array.tasks_board_dialog_items, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
 		    	switch (item){
 		    	case 0:
@@ -121,7 +125,7 @@ public class ADialog {
 		protected Boolean doInBackground(Void... params) {
 			publishProgress();
 			try {
-				timeController.deleteTask(task);
+				timeController.deleteTask(task, TasksBoard.taskList);
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -62,18 +62,6 @@ public class TimeController {
 		mTrackytAdapter.addTask(token, description);
 	}
 
-	public void startAll() throws Exception {
-		if (MyConfig.DEBUG) Log.d(TAG, "startAll()");
-		mTrackytAdapter.startAll(token);
-		addAllTaskInQueue();
-	}
-
-	public void stopAll() throws Exception {
-		if (MyConfig.DEBUG) Log.d(TAG, "stopAll()");
-		mTrackytAdapter.stopAll(token);
-		clearQueue();
-	}
-
 	public void startTask(final Task task) throws Exception {
 		if (MyConfig.DEBUG) Log.d(TAG, "startTask()");
 		if (task == null) {

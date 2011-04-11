@@ -108,12 +108,6 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.start_all:
-			new StartAll().execute();
-			return true;
-		case R.id.stop_all:
-			new StopAll().execute();
-			return true;
 		case R.id.menu_refresh:
 			new TasksLoader().execute();
 			return true;
@@ -271,77 +265,6 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Task hasn't been created, try again",
-						Toast.LENGTH_SHORT);
-			}
-		}
-
-	}
-
-	private class StartAll extends AsyncTask<Void, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			publishProgress();
-			try {
-				timeController.startAll();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-
-		@Override
-		protected void onProgressUpdate(Void... values) {
-			super.onProgressUpdate(values);
-			Toast.makeText(getApplicationContext(), "Starting all tasks...",
-					Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			if (result) {
-				Toast.makeText(getApplicationContext(), "Tasks started",
-						Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(getApplicationContext(),
-						"Task hasn't been started, try again",
-						Toast.LENGTH_SHORT);
-			}
-		}
-	}
-
-	private class StopAll extends AsyncTask<Void, Void, Boolean> {
-
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			publishProgress();
-			try {
-				timeController.stopAll();
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return false;
-			}
-		}
-
-		@Override
-		protected void onProgressUpdate(Void... values) {
-			super.onProgressUpdate(values);
-			Toast.makeText(getApplicationContext(), "Stoping all tasks...",
-					Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
-			if (result) {
-				Toast.makeText(getApplicationContext(), "Tasks stopped",
-						Toast.LENGTH_SHORT).show();
-			} else {
-				Toast.makeText(getApplicationContext(),
-						"Task hasn't been stopped, try again",
 						Toast.LENGTH_SHORT);
 			}
 		}

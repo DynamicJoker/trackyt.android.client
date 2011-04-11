@@ -64,20 +64,6 @@ public interface TrackytApiAdapter {
 	Task stopTask(ApiToken token, int taskId) throws Exception;
 	
 	/**
-	 * Stop all tasks
-	 * @param API authentication token
-	 * @throws Exception
-	 */
-	void startAll(ApiToken token) throws Exception;
-	 
-	/**
-	 * Stop all tasks
-	 * @param API authentication token
-	 * @throws Exception
-	 */
-	void stopAll(ApiToken token) throws Exception; 
-	
-	/**
 	 * Marks task as completed
 	 * @param API authentication token
 	 * @param taskId

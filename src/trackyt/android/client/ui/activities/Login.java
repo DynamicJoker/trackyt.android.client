@@ -5,19 +5,15 @@ import trackyt.android.client.TrackytApiAdapter;
 import trackyt.android.client.TrackytApiAdapterFactory;
 import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
-import trackyt.android.client.reponses.AuthenticationResponse;
-import trackyt.android.client.utils.RequestMaker;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class Login extends Activity {
@@ -52,9 +48,8 @@ public class Login extends Activity {
     }
 
 	public void createAccountOnClick(View view) {
-		Toast.makeText(this, "Not implemented yet", Toast.LENGTH_SHORT).show();
-
-		// TODO: implement createAccountOnClick()
+		Intent browserIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://www.trackyt.net/registration/mobile"));
+		startActivity(browserIntent);
 	}
 
 	private void openTasksBoardActivity() {

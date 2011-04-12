@@ -56,6 +56,7 @@ public class AlertTasksDone {
 		protected Boolean doInBackground(Void... params) {
 			publishProgress();
 			try {
+				screen.freezeViews();
 				timeController.deleteTask(task, TasksDone.taskList);
 				return true;
 			} catch (Exception e) {
@@ -79,6 +80,8 @@ public class AlertTasksDone {
 			} else {
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
+			
+			screen.unfreezeViews();
 		}
 	}
 }

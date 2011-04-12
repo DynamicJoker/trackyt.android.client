@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksDone extends ActivityGroup implements TasksScreen {
+	private static final String TAG = "TasksDone";
 	public static String token;
 	public static TimeController timeController;
 	public static RequestMaker requestMaker;
@@ -138,20 +139,21 @@ public class TasksDone extends ActivityGroup implements TasksScreen {
 			setupListView();
 			updateUI();
 			
-			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-					Task task = (Task) listView.getItemAtPosition(position);
-					alert.setTask(task);
-					alert.show();
-				}
-			});
+			listView.setOnItemClickListener(mListener);
 
 			progressDialog = null;
 		}
 	}
+	
+	private AdapterView.OnItemClickListener mListener = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1,
+				int position, long arg3) {
+			Task task = (Task) listView.getItemAtPosition(position);
+			alert.setTask(task);
+			alert.show();
+		}
+	};
 	
 	private void setupListView() {
 		mAdapter = new MyAdapter(this, R.id.list_view, taskList);
@@ -171,6 +173,18 @@ public class TasksDone extends ActivityGroup implements TasksScreen {
 	
 	public void newTasksLoader() {
 		new TasksLoader().execute();
+	}
+	
+	@Override
+	public void freezeViews() {
+		listView.setOnItemClickListener(null);
+		Log.d(TAG, "freezeViews()");
+	}
+
+	@Override
+	public void unfreezeViews() {
+		listView.setOnItemClickListener(mListener);
+		Log.d(TAG, "unfreezeViews()");
 	}
 	
 //	@Override

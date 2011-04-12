@@ -125,6 +125,7 @@ public class ADialog {
 		protected Boolean doInBackground(Void... params) {
 			publishProgress();
 			try {
+				screen.freezeViews();
 				timeController.deleteTask(task, TasksBoard.taskList);
 				return true;
 			} catch (Exception e) {
@@ -147,6 +148,8 @@ public class ADialog {
 			} else {
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
+			
+			screen.unfreezeViews();
 		}
 	}
 	
@@ -156,6 +159,7 @@ public class ADialog {
 		protected Boolean doInBackground(Void... params) {
 			publishProgress();
 			try {
+				screen.freezeViews();
 				timeController.doneTask(task);
 				return true;
 			} catch (Exception e) {
@@ -178,6 +182,8 @@ public class ADialog {
 			} else {
 				Toast.makeText(mContext, "Task wasn't marked as done, try again", Toast.LENGTH_SHORT).show();
 			}
+			
+			screen.unfreezeViews();
 		}
 	}
 }

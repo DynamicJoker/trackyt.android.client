@@ -9,5 +9,7 @@ public interface TasksScreen {
 	
 	void updateUI();
 	List<Task> getTaskList();
+	void freezeViews();
+	void unfreezeViews();
 
 }

@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class TasksBoard extends ActivityGroup implements TasksScreen {
+	private static final String TAG = "TasksBoard";
 	public static String token;
 	public static TimeController timeController;
 	public static RequestMaker requestMaker;
@@ -44,8 +46,6 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	private ADialog alert;
 	private TabHost mTab;
 	
-	private TasksDone tasksDoneScreen;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -224,20 +224,21 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 				timeController.runCount();
 			}
 
-			listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> arg0, View arg1,
-						int position, long arg3) {
-					Task task = (Task) listView.getItemAtPosition(position);
-					alert.setTask(task);
-					alert.show();
-				}
-			});
+			listView.setOnItemClickListener(mListener);
 
 			progressDialog = null;
 		}
 	}
+	
+	private AdapterView.OnItemClickListener mListener = new AdapterView.OnItemClickListener() {
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1,
+				int position, long arg3) {
+			Task task = (Task) listView.getItemAtPosition(position);
+			alert.setTask(task);
+			alert.show();
+		}
+	};
 
 	private class AddNewTask extends AsyncTask<Void, Void, Boolean> {
 
@@ -280,5 +281,17 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 			}
 		}
 
+	}
+
+	@Override
+	public void freezeViews() {
+		listView.setOnItemClickListener(null);
+		Log.d(TAG, "freezeViews()");
+	}
+
+	@Override
+	public void unfreezeViews() {
+		listView.setOnItemClickListener(mListener);
+		Log.d(TAG, "unfreezeViews()");
 	}
 }

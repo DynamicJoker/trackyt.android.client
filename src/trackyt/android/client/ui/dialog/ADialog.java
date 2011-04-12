@@ -149,6 +149,7 @@ public class ADialog {
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
 			
+			screen.updateUI();
 			screen.unfreezeViews();
 		}
 	}
@@ -183,6 +184,7 @@ public class ADialog {
 				Toast.makeText(mContext, "Task wasn't marked as done, try again", Toast.LENGTH_SHORT).show();
 			}
 			
+			screen.updateUI();
 			screen.unfreezeViews();
 		}
 	}

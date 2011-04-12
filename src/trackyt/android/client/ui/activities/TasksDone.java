@@ -187,17 +187,4 @@ public class TasksDone extends ActivityGroup implements TasksScreen {
 		Log.d(TAG, "unfreezeViews()");
 	}
 	
-//	@Override
-//	protected void onResume() {
-//		Log.d("Dev", "TasksDone: onResume()");
-//		super.onStart();
-//		if (mAdapter != null)
-//			updateUI();
-//	}
-//	
-//	@Override
-//	protected void onPause() {
-//		super.onPause();
-//		Log.d("Dev", "TasksDone: onPause()");
-//	}
 }

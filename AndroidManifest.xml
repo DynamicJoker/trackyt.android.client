@@ -10,17 +10,15 @@
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
-				
-				<data android:scheme="trackyt.application" />
-    			<action android:name="android.intent.action.VIEW" />
 			</intent-filter>
 		</activity>
-		<activity android:name="trackyt.android.client.ui.activities.TasksBoard"></activity>
+		<activity android:name="trackyt.android.client.ui.activities.TasksBoard"
+			android:configChanges="orientation"></activity>
 		<activity android:name="trackyt.android.client.ui.activities.TasksDone"></activity>
 
 	</application>
 
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.VIBRATE" />
 
-
-	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest> 

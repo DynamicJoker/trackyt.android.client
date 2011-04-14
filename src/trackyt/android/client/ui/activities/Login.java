@@ -7,10 +7,12 @@ import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,6 +89,8 @@ public class Login extends Activity {
 			if (result) {
 				openTasksBoardActivity();
 			} else {
+				Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(getApplicationContext(), "Login wasn't successful, try again", Toast.LENGTH_SHORT).show();
 			}
 		}

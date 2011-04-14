@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -130,6 +131,8 @@ public class TasksDone extends ActivityGroup implements TasksScreen {
 			super.onPostExecute(result);
 
 			if (!result) {
+				Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(getApplicationContext(),
 						"Something wrong happened, try again",
 						Toast.LENGTH_SHORT).show();

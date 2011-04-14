@@ -16,6 +16,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -212,6 +213,8 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 			super.onPostExecute(result);
 
 			if (!result) {
+				Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(getApplicationContext(),
 						"Something wrong happened, try again",
 						Toast.LENGTH_SHORT).show();
@@ -275,6 +278,8 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 				Toast.makeText(getApplicationContext(), "Task created",
 						Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(getApplicationContext(),
 						"Task hasn't been created, try again",
 						Toast.LENGTH_SHORT);
@@ -293,5 +298,11 @@ public class TasksBoard extends ActivityGroup implements TasksScreen {
 	public void unfreezeViews() {
 		listView.setOnItemClickListener(mListener);
 		Log.d(TAG, "unfreezeViews()");
+	}
+	
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		Log.d("Dev", "onRetainNonConfigurationInstance");
+		return super.onRetainNonConfigurationInstance();
 	}
 }

@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -86,6 +87,9 @@ public class ADialog {
 			if (result) {
 				Toast.makeText(mContext, "Task was started on server", Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
+
 				Toast.makeText(mContext, "Task wasn't started, try again", Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -115,6 +119,8 @@ public class ADialog {
 			if (result) {
 				Toast.makeText(mContext, "Task was stopped on server", Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(mContext, "Task wasn't stopped, try again", Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -146,6 +152,8 @@ public class ADialog {
 			if (result) {
 				Toast.makeText(mContext, "Task was deleted on server", Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
 			
@@ -181,6 +189,8 @@ public class ADialog {
 			if (result) {
 				Toast.makeText(mContext, "Task was marked as done on server", Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(mContext, "Task wasn't marked as done, try again", Toast.LENGTH_SHORT).show();
 			}
 			

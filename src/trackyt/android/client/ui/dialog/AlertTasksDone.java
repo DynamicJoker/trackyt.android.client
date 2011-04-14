@@ -9,7 +9,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.util.Log;
+import android.os.Vibrator;
 import android.widget.Toast;
 
 public class AlertTasksDone {
@@ -78,6 +78,8 @@ public class AlertTasksDone {
 				screen.updateUI();
 				Toast.makeText(mContext, "Task was deleted on server", Toast.LENGTH_SHORT).show();
 			} else {
+				Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(50);
 				Toast.makeText(mContext, "Task wasn't deleted, try again", Toast.LENGTH_SHORT).show();
 			}
 			

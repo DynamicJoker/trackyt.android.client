@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<style name="v11_text">
-		<item name="android:textSize">35dp</item>
+
+	<style name="v11_text_large">
+		<item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
 	</style>
+	
+	<style name="v11_text_medium">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+	</style>
+	
+	<style name="v11_text_small">
+		<item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+	</style>
+	
 </resources>

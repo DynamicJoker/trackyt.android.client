@@ -10,7 +10,7 @@ import trackyt.android.client.TrackytApiAdapter;
 import trackyt.android.client.exceptions.NotAuthenticatedException;
 import trackyt.android.client.models.ApiToken;
 import trackyt.android.client.models.Task;
-import trackyt.android.client.ui.activities.TasksScreen;
+import trackyt.android.client.ui.phone.TasksScreen;
 import trackyt.android.client.utils.MyConfig;
 import android.os.Handler;
 import android.util.Log;

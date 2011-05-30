@@ -1,36 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="fill_parent"
   android:layout_height="fill_parent"
-  android:background="#ffffff"
-  android:orientation="vertical">
-  
-	  <TextView
-	  	android:id="@+id/title_text_view"
-	  	android:layout_width="fill_parent"
-	  	android:layout_height="wrap_content"
-	  	android:text="Trackyt.net"
-	  	android:textColor="#ffffff"
-	  	android:textSize="14dp"
-	  	android:background="#206600"
-	  	android:paddingLeft="10dp"
-	  	android:textStyle="bold">
-	  </TextView>
+  android:orientation="vertical" android:layout_width="wrap_content">
 	  
+	  <LinearLayout
+	  	android:layout_width="wrap_content"
+	  	android:layout_height="wrap_content"
+	  	android:orientation="vertical"
+	  	android:paddingLeft="300dp"
+	  	android:paddingRight="300dp"
+	  	android:paddingTop="100dp">
+	  	
+	  	
 	  	<LinearLayout
-	  		android:layout_width="fill_parent"
 	  		android:layout_height="wrap_content"
-	  		android:padding="10dp"
-	  		android:orientation="vertical"
-	  		android:background="#ecfff1">
+	  		android:layout_width="match_parent"
+	  		android:orientation="vertical">
 	  		
 			  	<TextView
 			  		android:id="@+id/login_text_view"
 			  		android:layout_width="wrap_content"
 			  		android:layout_height="wrap_content"
-			  		android:text="Login"
-			  		android:textColor="#000000">
+			  		style="@style/v11_text"
+			  		android:text="Login">
 			  	</TextView>
 			  		
 			  	<EditText
@@ -46,7 +39,7 @@
 			  		android:layout_width="wrap_content"
 			  		android:layout_height="wrap_content"
 			  		android:text="Password"
-			  		android:textColor="#000000">
+			  		style="@style/v11_text">
 			  	</TextView>
 			  	
 			  	<EditText
@@ -73,7 +66,8 @@
 	  	<RelativeLayout
 	  		android:layout_width="fill_parent"
 	  		android:layout_height="fill_parent"
-	  		android:padding="10dp">
+	  		android:paddingTop="10dp" 
+	  		android:layout_gravity="center_horizontal">
 	  		
 			<Button
 				android:id="@+id/create_account_button"
@@ -88,8 +82,7 @@
 	  		<TextView
 	  			android:id="@string/have_account"
 	  			android:text="Don't have an account?"
-	  			android:textColor="#206600"
-	  			android:textStyle="bold"
+	  			style="@style/v11_text"
 	  			android:layout_width="fill_parent"
 	  			android:layout_height="wrap_content"
 	  			android:gravity="center_vertical"
@@ -97,5 +90,6 @@
 	  		</TextView>
 	  		
 	  	</RelativeLayout>
+	</LinearLayout>
 
 </LinearLayout>

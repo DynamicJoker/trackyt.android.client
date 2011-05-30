@@ -1,4 +1,4 @@
-package trackyt.android.client.ui.activities;
+package trackyt.android.client.ui.phone;
 
 import trackyt.android.client.R;
 import trackyt.android.client.TrackytApiAdapter;
